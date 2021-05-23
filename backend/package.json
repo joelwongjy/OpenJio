@@ -1,0 +1,69 @@
+{
+  "name": "openjio-backend",
+  "version": "1.0.0",
+  "description": "Backend for OpenJio",
+  "private": true,
+  "main": "index.ts",
+  "repository": "https://github.com/openjio/backend",
+  "author": "JoJo's Circus",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "class-validator": "^0.12.2",
+    "cors": "^2.8.5",
+    "date-fns": "^2.16.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.20",
+    "morgan": "^1.10.0",
+    "pg": "^8.6.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.25"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/body-parser": "^1.19.0",
+    "@types/cors": "^2.8.7",
+    "@types/express": "^4.17.11",
+    "@types/faker": "^4.1.12",
+    "@types/jest": "^26.0.13",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/lodash": "^4.14.161",
+    "@types/morgan": "^1.9.1",
+    "@types/node": "^14.6.4",
+    "@types/supertest": "^2.0.10",
+    "cross-env": "^7.0.2",
+    "faker": "^5.1.0",
+    "husky": "^4.2.5",
+    "jest": "^26.4.2",
+    "lint-staged": "^10.3.0",
+    "prettier": "^2.1.1",
+    "pretty-quick": "^3.0.0",
+    "supertest": "^4.0.2",
+    "ts-jest": "^26.3.0",
+    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.0.0-pre.62",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.0.2"
+  },
+  "lint-staged": {
+    "**/*.{ts,js}": [
+      "pretty-quick --staged"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "scripts": {
+    "lint": "prettier --write \"src/**/*.{ts,tsx}\" --tab-width 2",
+    "start": "set debug=* && cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only ./src/index.ts",
+    "typeorm": "ts-node -r tsconfig-paths/register ../node_modules/typeorm/cli.js",
+    "test": "jest --runInBand",
+    "build": "tsc && cp package.json ./build/ && cd build && yarn install",
+    "production": "cd build && cross-env NODE_ENV=production node ./src/index.js"
+  }
+}
