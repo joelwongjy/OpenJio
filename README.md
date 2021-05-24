@@ -1,8 +1,8 @@
 # OpenJio
 
-## NUS Orbital (CP2106 Independent Software Development Project)<br>
-### Team JoJo's Circus #2582<br>
-### By Joel Wong and Joseph Marcus
+### NUS Orbital (CP2106 Independent Software Development Project)<br>
+Team JoJo's Circus #2582<br>
+Joel Wong & Joseph Marcus<br>
 ## Table of contents
 
 - [Status](#status)
