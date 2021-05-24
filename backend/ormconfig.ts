@@ -2,10 +2,10 @@ import { ConnectionOptions } from "typeorm";
 
 switch (process.env.NODE_ENV) {
   case "development":
-    require("dotenv").config({ path: ".env.development" });
-    break;
+  case "staging":
   case "test":
-    require("dotenv").config({ path: ".env.test" });
+  case "production":
+    require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
     break;
 }
 
@@ -16,6 +16,7 @@ const {
   POSTGRES_PORT,
   POSTGRES_NAME,
   POSTGRES_DISABLE_SSL,
+  POSTGRES_SYNCHRONISE,
 } = process.env;
 
 if (
@@ -37,7 +38,7 @@ export const postgres: ConnectionOptions = {
   port: Number(POSTGRES_PORT),
   database: POSTGRES_NAME,
   ssl: !POSTGRES_DISABLE_SSL,
-  synchronize: true,
+  synchronize: !!POSTGRES_SYNCHRONISE,
   logging: false,
   entities: [`${__dirname}/src/entities/**/*.js`, "src/entities/**/*.ts"],
   migrations: ["src/migrations/**/*.ts"],
@@ -50,7 +51,8 @@ export const postgres: ConnectionOptions = {
     migrationsDir: `src/migrations`,
     subscribersDir: `src/subscribers`,
   },
-  migrationsRun: true,
+  migrationsRun: false,
+  dropSchema: false,
 };
 
 module.exports = postgres;

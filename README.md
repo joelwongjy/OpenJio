@@ -1,18 +1,21 @@
 # OpenJio
 
-NUS Orbital (CP2106 Independent Software Development Project)<br>
-<i>By Joel Wong and Joseph Marcus</i><br>
-
+## NUS Orbital (CP2106 Independent Software Development Project)<br>
+### Team JoJo's Circus #2582<br>
+### By Joel Wong and Joseph Marcus
 ## Table of contents
 
-- [General info](#general-info)
+- [Status](#status)
+- [General Info](#general-info)
 - [Tech Stack](#tech-stack)
 - [Setup](#setup)
 - [Development](#development)
 - [Features](#features)
-- [Status](#status)
 
-## General info
+## Status
+
+Project is under development
+## General Info
 
 <b>Orbital Targeted Level of Achievement:</b> Apollo 11
 
@@ -33,11 +36,11 @@ We hope to streamline the food ordering experience by consolidating orders and p
 
 ## Setup
 
-Ensure that you have Node.js, npm and Docker Compose.
+### Ensure that you have Node.js, npm and PostgreSQL installed.
 
-If you have not installed Node.js, it is recommended to install Node.js from their site [here](https://nodejs.org/en/). This will not only install the latest version of Node.js but also npm.
+If you do not have Node.js installed, it is recommended to install from their site [here](https://nodejs.org/en/). This will install the latest version of Node.js along with npm.
 
-If you do not have Docker Compose installed, follow the instructions [here](https://docs.docker.com/compose/install/). Generally, we advise installing [Docker Desktop](https://www.docker.com/products/docker-desktop), which comes with Docker Compose. Note that for Windows users, you may be required to install the [Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/) instead.
+If you do not have PostgreSQL installed, download it [here](https://postgresapp.com/downloads.html).
 
 ### Clone the repository
 
@@ -47,33 +50,35 @@ git clone git@github.com:joelwongjy/OpenJio.git
 
 ### Install dependencies
 
-To install frontend dependencies, `cd` to the frontend directory and run
+1. To install frontend dependencies, `cd` to the frontend directory and run
+    ```bash
+    npm install
+    ```
 
-```bash
-npm install
-```
+1. To install backend dependencies, `cd` to the backend directory and run
+    ```bash
+    npm install
+    ```
 
-To install backend dependencies, `cd` to the backend directory and run
-
-```bash
-npm install
-```
+1. To create the PostgreSQL databases, in the backend directory, run
+    ```bash
+    ./setup_db.sh
+    ```
+    If your default Postgres account is not Postgres, rename the script to `setup_db_local.sh` and change Postgres to the default account name. Then run
+    ```bash
+    ./setup_db_local.sh
+    ```
 
 ## Development
 
 ### Start server in development
 
-First, get the database server up by running
+1. Run Postgres app.
 
-```bash
-docker-compose up
-```
-
-Then, start the local backend server by running
-
-```bash
-npm start
-```
+2. Start the local backend server by running
+    ```bash
+    npm start
+    ```
 
 The server should now be running locally on `localhost:3001`, and the API can be reached via `localhost:3001/v1`.
 
@@ -81,6 +86,7 @@ The backend server must be running before starting the app.
 
 ### Start app in development
 
+1. Start the app by running
 ```bash
 ionic serve
 ```
@@ -100,7 +106,3 @@ The website should be now be live and connected with the backend server and data
 - Split the cost of food and delivery among each person
 - Access to PayLah! link for payment
 - View past orders and outstanding fees owed
-
-## Status
-
-Project is under development

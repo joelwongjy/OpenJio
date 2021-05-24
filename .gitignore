@@ -39,5 +39,8 @@ backend/npm-debug.log*
 backend/yarn-debug.log*
 backend/yarn-error.log*
 
+# local scripts
+backend/*_local.sh
+
 # Optional eslint cache
 backend/.eslintcache
