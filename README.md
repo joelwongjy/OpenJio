@@ -54,6 +54,10 @@ git clone git@github.com:joelwongjy/OpenJio.git
     ```bash
     npm install
     ```
+1. To run the Ionic app, install the Ionic CLI by running
+    ```bash
+    npm install -g @ionic/cli
+    ```
 
 1. To install backend dependencies, `cd` to the backend directory and run
     ```bash
@@ -64,7 +68,13 @@ git clone git@github.com:joelwongjy/OpenJio.git
     ```bash
     ./setup_db.sh
     ```
-    If your default Postgres account is not Postgres, rename the script to `setup_db_local.sh` and change Postgres to the default account name. Then run
+    
+    If your default Postgres account is not superuser `postgres`, switch to superuser by running
+    ```bash
+    sudo -u postgres psql
+    ```
+    
+    Alternatively, rename the script to `setup_db_local.sh` and change `postgres` to the default account name. Then run
     ```bash
     ./setup_db_local.sh
     ```
@@ -73,7 +83,7 @@ git clone git@github.com:joelwongjy/OpenJio.git
 
 ### Start server in development
 
-1. Run Postgres app.
+1. Run Postgres app and start the server on `Port 5432`.
 
 2. Start the local backend server by running
     ```bash
