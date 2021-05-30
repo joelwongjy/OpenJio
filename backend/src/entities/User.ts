@@ -14,17 +14,24 @@ export class User extends Discardable {
   entityName = "User";
 
   constructor(
-    username: string,
     name: string,
+    username: string,
+    email: string,
     password: string,
     confirmPassword: string
   ) {
     super();
-    this.username = username;
     this.name = name;
+    this.username = username;
+    this.email = email;
     this.password = password;
     this.confirmPassword = confirmPassword;
   }
+
+  @Column({ type: "character varying" })
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 
   @Column({ unique: true })
   @IsNotEmpty()
@@ -35,7 +42,7 @@ export class User extends Discardable {
   @Column({ type: "character varying" })
   @IsNotEmpty()
   @IsString()
-  name: string;
+  email: string;
 
   @Column({ type: "character varying", nullable: true, select: false })
   @MinLength(8)
