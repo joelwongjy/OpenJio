@@ -10,19 +10,22 @@ import {
   IonLabel,
   IonLoading,
   IonIcon,
-  IonRouterLink,
   IonRow,
   IonGrid,
+  IonRouterLink,
 } from "@ionic/react";
 import { fastFood } from "ionicons/icons";
-import "./Login.css";
+import "./Signup.css";
 import { useAuth } from "contexts/AuthContext";
 
-const Login: React.FC = () => {
-  const { login } = useAuth();
+const Signup: React.FC = () => {
+  const { signup } = useAuth();
 
+  const [name, setName] = useState<string>("");
   const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [showLoading, setShowLoading] = useState(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -32,11 +35,11 @@ const Login: React.FC = () => {
     setErrorMessage("");
   };
 
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     clearError();
     try {
-      await login({ username, password });
+      await signup({ name, username, email, password, confirmPassword });
     } catch (error) {
       setIsError(true);
       setErrorMessage(error.message);
@@ -55,13 +58,12 @@ const Login: React.FC = () => {
           <IonRow>
             <IonIcon icon={fastFood} className="icon"></IonIcon>
           </IonRow>
-          <IonText className="text">Log In to Open Jio</IonText>
+          <IonText className="text">Create your account</IonText>
           {isError ? (
             <div
               style={{
                 color: "red",
                 marginTop: "0.5rem",
-                visibility: isError ? "visible" : "hidden",
                 height: "1rem",
               }}
             >
@@ -70,7 +72,20 @@ const Login: React.FC = () => {
           ) : (
             <div />
           )}
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleSignup}>
+            <IonCol className="ion-padding-bottom">
+              <IonItem>
+                <IonLabel position="floating">Name</IonLabel>
+                <IonInput
+                  type="text"
+                  value={name}
+                  onIonChange={(e) => {
+                    clearError();
+                    setName(e.detail.value!);
+                  }}
+                ></IonInput>
+              </IonItem>
+            </IonCol>
             <IonCol className="ion-padding-bottom">
               <IonItem>
                 <IonLabel position="floating">Username</IonLabel>
@@ -80,6 +95,19 @@ const Login: React.FC = () => {
                   onIonChange={(e) => {
                     clearError();
                     setUsername(e.detail.value!);
+                  }}
+                ></IonInput>
+              </IonItem>
+            </IonCol>
+            <IonCol className="ion-padding-bottom">
+              <IonItem>
+                <IonLabel position="floating">Email</IonLabel>
+                <IonInput
+                  type="email"
+                  value={email}
+                  onIonChange={(e) => {
+                    clearError();
+                    setEmail(e.detail.value!);
                   }}
                 ></IonInput>
               </IonItem>
@@ -97,17 +125,27 @@ const Login: React.FC = () => {
                 ></IonInput>
               </IonItem>
             </IonCol>
+            <IonCol className="ion-padding-bottom">
+              <IonItem>
+                <IonLabel position="floating">Confirm Password</IonLabel>
+                <IonInput
+                  type="password"
+                  value={confirmPassword}
+                  onIonChange={(e) => {
+                    clearError();
+                    setConfirmPassword(e.detail.value!);
+                  }}
+                ></IonInput>
+              </IonItem>
+            </IonCol>
 
             <IonButton class="button" expand="block" type="submit">
-              Log in
+              Sign up
             </IonButton>
           </form>
           <IonRow class="ion-padding-vertical">
-            <IonRouterLink href={`/register`}>Forgot password?</IonRouterLink>
-          </IonRow>
-          <IonRow>
-            <IonText>Don't have an account?</IonText>
-            <IonRouterLink href={`/signup`}>Sign up</IonRouterLink>
+            <IonText>Already have an account?</IonText>
+            <IonRouterLink href={`/login`}>Log in</IonRouterLink>
           </IonRow>
         </IonGrid>
       </IonContent>
@@ -115,4 +153,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Signup;

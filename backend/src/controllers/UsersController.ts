@@ -10,14 +10,15 @@ export async function create(
   request: Request,
   response: Response
 ): Promise<void> {
-  const { username, name, password, confirmPassword } = pick(
+  const { name, username, email, password, confirmPassword } = pick(
     request.body,
-    "username",
     "name",
+    "username",
+    "email",
     "password",
     "confirmPassword"
   );
-  const user = new User(username, name, password, confirmPassword);
+  const user = new User(name, username, email, password, confirmPassword);
   const errors = await validate(user);
   if (errors.length > 0) {
     console.log(errors);

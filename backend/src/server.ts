@@ -10,8 +10,7 @@ import { postgres } from "../ormconfig";
 import routes from "./routes";
 
 const corsOptions: CorsOptions = {
-  origin:
-    process.env.NODE_ENV === "production" ? /.*campusimpact\.org.sg.*/ : "*",
+  origin: "*",
 };
 
 export class ApiServer {

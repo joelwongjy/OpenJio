@@ -1,5 +1,5 @@
 .form {
-  max-width: 400px;
+  max-width: 370px;
   margin: 0 auto;
   padding-top: 16px;
 }
@@ -10,9 +10,9 @@
 }
 
 .icon {
-  font-size: 64px;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  font-size: 40px;
+  padding-top: 8px;
+  padding-bottom: 24px;
 }
 
 .button {

@@ -1,10 +1,13 @@
+import React from "react";
 import {
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonButtons,
   IonButton,
+  IonIcon,
 } from "@ionic/react";
+import { fastFood } from "ionicons/icons";
+
 import { useAuth } from "contexts/AuthContext";
 
 const Header: React.FC = () => {
@@ -13,8 +16,8 @@ const Header: React.FC = () => {
   return (
     <IonHeader>
       <IonToolbar>
-        <IonTitle>OpenJio</IonTitle>
-        <IonButtons slot="secondary">
+        <IonIcon icon={fastFood} className="icon ion-padding"></IonIcon>
+        <IonButtons slot="primary">
           <IonButton onClick={logout}>Logout</IonButton>
         </IonButtons>
       </IonToolbar>

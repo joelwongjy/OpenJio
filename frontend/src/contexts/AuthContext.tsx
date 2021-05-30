@@ -4,7 +4,7 @@ import { useAsync } from "react-async";
 
 import Loading from "components/loading";
 import AuthContextInterface from "interfaces/contexts/authContext";
-import { UserPostData } from "interfaces/models/users";
+import { UserLoginData, UserPostData } from "interfaces/models/users";
 import AuthService from "services/authService";
 
 const AuthContext =
@@ -51,7 +51,7 @@ const AuthProvider: React.FunctionComponent = (props) => {
         return Promise.reject(new Error(e.message));
       });
 
-  const login = (loginData: UserPostData): Promise<void> =>
+  const login = (loginData: UserLoginData): Promise<void> =>
     AuthService.login(loginData)
       .then(reload)
       .catch((e: Error) => {
