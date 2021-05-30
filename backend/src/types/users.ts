@@ -1,9 +1,15 @@
 import { DiscardableData, isDiscardableData } from "./entities";
 
 export interface UserPostData {
-  username: string;
   name: string;
+  username: string;
+  email: string;
   password?: string | null;
+  confirmPassword?: string | null;
+}
+export interface UserLoginData {
+  username: string;
+  password: string | null;
 }
 
 export interface UserPatchData {
