@@ -1,13 +1,24 @@
 import { hashSync } from "bcryptjs";
 import { IsNotEmpty, IsString, MinLength, Validate } from "class-validator";
 import { sign } from "jsonwebtoken";
-import { BeforeInsert, BeforeUpdate, Column, Entity } from "typeorm";
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  getRepository,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+} from "typeorm";
 import IsUniqueUsername from "../constraints/IsUniqueUsername";
 import Match from "../constraints/IsMatch";
 import { AuthenticationData } from "../types/auth";
 import { BearerTokenType } from "../types/tokens";
-import { UserData } from "../types/users";
+import { UserData, UserListData } from "../types/users";
 import { Discardable } from "./Discardable";
+import { Jio } from "./Jio";
+import { JioListData } from "src/types/jios";
 
 @Entity()
 export class User extends Discardable {
@@ -53,6 +64,13 @@ export class User extends Discardable {
   @Match("password")
   confirmPassword: string | null;
 
+  @OneToMany((type) => Jio, (jio) => jio.user)
+  openJios!: Jio[];
+
+  @ManyToMany(() => Jio)
+  @JoinTable()
+  joinedJios!: Jio[];
+
   @BeforeInsert()
   @BeforeUpdate()
   hashPassword() {
@@ -79,9 +97,39 @@ export class User extends Discardable {
     return { accessToken };
   };
 
-  getData = (): UserData => ({
+  getListData = (): UserListData => ({
     ...this.getBase(),
     username: this.username,
     name: this.name,
   });
+
+  getData = (): UserData => {
+    return this.getListData();
+  };
+
+  getOpenJioData = async (): Promise<JioListData[]> => {
+    const jios =
+      this.openJios ||
+      (
+        await getRepository(User).findOneOrFail({
+          where: { id: this.id },
+          relations: ["openJios"],
+        })
+      ).openJios;
+
+    return await Promise.all(jios.map((j: Jio) => j.getListData()));
+  };
+
+  getJoinedJioData = async (): Promise<JioListData[]> => {
+    const jios =
+      this.joinedJios ||
+      (
+        await getRepository(User).findOneOrFail({
+          where: { id: this.id },
+          relations: ["joinedJios"],
+        })
+      ).openJios;
+
+    return await Promise.all(jios.map((j: Jio) => j.getListData()));
+  };
 }
