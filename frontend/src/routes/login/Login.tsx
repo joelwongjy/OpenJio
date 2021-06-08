@@ -26,7 +26,7 @@ const Login: React.FC = () => {
       setIsError(true);
       setErrorMessage(error.message);
     }
-  }; 
+  };
 
   return (
     <IonPage>
