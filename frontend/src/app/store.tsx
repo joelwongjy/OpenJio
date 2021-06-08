@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-import rootReducer from "reducers/rootReducer";
+import rootReducer from 'reducers/rootReducer';
 
 const persistConfig = {
-  key: "openjio-frontend",
+  key: 'openjio-frontend',
   storage,
 };
 
@@ -27,10 +27,10 @@ const store = configureStore({
 export const persistor = persistStore(store);
 
 // Settings to aid development
-if (process.env.NODE_ENV === "development" && module.hot) {
-  module.hot.accept("reducers/rootReducer", () => {
+if (process.env.NODE_ENV === 'development' && module.hot) {
+  module.hot.accept('reducers/rootReducer', () => {
     // eslint-disable-next-line global-require
-    const newRootReducer = require("reducers/rootReducer").default;
+    const newRootReducer = require('reducers/rootReducer').default;
     store.replaceReducer(newRootReducer);
   });
 }

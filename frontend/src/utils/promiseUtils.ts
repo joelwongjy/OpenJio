@@ -4,7 +4,7 @@ export const retryPromise = (
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   promise: any,
   retriesLeft = 5,
-  interval = 1000
+  interval = 1000,
 ): Promise<unknown> => {
   return new Promise((resolve, reject) => {
     promise()
@@ -18,7 +18,7 @@ export const retryPromise = (
 
           retryPromise(promise, retriesLeft - 1, interval).then(
             resolve,
-            reject
+            reject,
           );
         }, interval);
       });

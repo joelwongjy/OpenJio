@@ -1,17 +1,20 @@
-import React from "react";
+import React from 'react';
 import {
   IonContent,
   IonFab,
   IonFabButton,
   IonIcon,
   IonPage,
-} from "@ionic/react";
-import { add } from "ionicons/icons";
+} from '@ionic/react';
+import { add } from 'ionicons/icons';
 
-import ExploreContainer from "../../components/ExploreContainer";
-import Header from "../../components/header";
-import "./Home.css";
-import { useUser } from "contexts/UserContext";
+import { CREATE } from 'constants/routes';
+import { useUser } from 'contexts/UserContext';
+
+import './Home.css';
+
+import ExploreContainer from '../../components/ExploreContainer';
+import Header from '../../components/header';
 
 const Home: React.FC = () => {
   const { user } = useUser();
@@ -19,10 +22,10 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <IonContent fullscreen>
-        <Header></Header>
-        <ExploreContainer name={`Welcome, ${user ? user.name : ""}!`} />
+        <Header />
+        <ExploreContainer name={`Welcome, ${user ? user.name : ''}!`} />
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton>
+          <IonFabButton href={`${CREATE}`}>
             <IonIcon icon={add} />
           </IonFabButton>
         </IonFab>

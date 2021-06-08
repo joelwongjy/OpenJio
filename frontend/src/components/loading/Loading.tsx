@@ -1,5 +1,5 @@
-import React from "react";
-import { IonSpinner, IonContent } from "@ionic/react";
+import React from 'react';
+import { IonContent, IonSpinner } from '@ionic/react';
 
 const Loading: React.FunctionComponent = () => {
   return (

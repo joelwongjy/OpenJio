@@ -1,13 +1,13 @@
-import { DiscardableData } from "./base";
+import { DiscardableData } from './base';
 
 export enum DefaultUserRole {
-  ADMIN = "Admin",
-  USER = "User",
+  ADMIN = 'Admin',
+  USER = 'User',
 }
 
 export enum StudentMode {
-  EDIT = "EDIT",
-  NEW = "NEW",
+  EDIT = 'EDIT',
+  NEW = 'NEW',
 }
 
 export interface UserPostData {

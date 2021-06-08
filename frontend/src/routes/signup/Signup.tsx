@@ -1,45 +1,49 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
+  IonButton,
+  IonCol,
   IonContent,
+  IonGrid,
+  IonIcon,
   IonInput,
   IonItem,
-  IonCol,
-  IonPage,
-  IonText,
-  IonButton,
   IonLabel,
   IonLoading,
-  IonIcon,
-  IonRow,
-  IonGrid,
+  IonPage,
   IonRouterLink,
-} from "@ionic/react";
-import { fastFood } from "ionicons/icons";
-import "./Signup.css";
-import { useAuth } from "contexts/AuthContext";
+  IonRow,
+  IonText,
+} from '@ionic/react';
+import { fastFood } from 'ionicons/icons';
+
+import { useAuth } from 'contexts/AuthContext';
+
+import './Signup.css';
 
 const Signup: React.FC = () => {
   const { signup } = useAuth();
 
-  const [name, setName] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [name, setName] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showLoading, setShowLoading] = useState(false);
   const [isError, setIsError] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const clearError = () => {
     setIsError(false);
-    setErrorMessage("");
+    setErrorMessage('');
   };
 
   const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     clearError();
     try {
-      await signup({ name, username, email, password, confirmPassword });
+      await signup({
+        name, username, email, password, confirmPassword,
+      });
     } catch (error) {
       setIsError(true);
       setErrorMessage(error.message);
@@ -56,15 +60,15 @@ const Signup: React.FC = () => {
             onDidDismiss={() => setShowLoading(false)}
           />
           <IonRow>
-            <IonIcon icon={fastFood} className="icon"></IonIcon>
+            <IonIcon icon={fastFood} className="icon" />
           </IonRow>
           <IonText className="text">Create your account</IonText>
           {isError ? (
             <div
               style={{
-                color: "red",
-                marginTop: "0.5rem",
-                height: "1rem",
+                color: 'red',
+                marginTop: '0.5rem',
+                height: '1rem',
               }}
             >
               {errorMessage}
@@ -83,7 +87,7 @@ const Signup: React.FC = () => {
                     clearError();
                     setName(e.detail.value!);
                   }}
-                ></IonInput>
+                />
               </IonItem>
             </IonCol>
             <IonCol className="ion-padding-bottom">
@@ -96,7 +100,7 @@ const Signup: React.FC = () => {
                     clearError();
                     setUsername(e.detail.value!);
                   }}
-                ></IonInput>
+                />
               </IonItem>
             </IonCol>
             <IonCol className="ion-padding-bottom">
@@ -109,7 +113,7 @@ const Signup: React.FC = () => {
                     clearError();
                     setEmail(e.detail.value!);
                   }}
-                ></IonInput>
+                />
               </IonItem>
             </IonCol>
             <IonCol className="ion-padding-bottom">
@@ -122,7 +126,7 @@ const Signup: React.FC = () => {
                     clearError();
                     setPassword(e.detail.value!);
                   }}
-                ></IonInput>
+                />
               </IonItem>
             </IonCol>
             <IonCol className="ion-padding-bottom">
@@ -135,7 +139,7 @@ const Signup: React.FC = () => {
                     clearError();
                     setConfirmPassword(e.detail.value!);
                   }}
-                ></IonInput>
+                />
               </IonItem>
             </IonCol>
 
@@ -145,7 +149,7 @@ const Signup: React.FC = () => {
           </form>
           <IonRow class="ion-padding-vertical">
             <IonText>Already have an account?</IonText>
-            <IonRouterLink href={`/login`}>Log in</IonRouterLink>
+            <IonRouterLink href="/login">Log in</IonRouterLink>
           </IonRow>
         </IonGrid>
       </IonContent>

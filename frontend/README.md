@@ -147,7 +147,7 @@ These hooks are exported from the various `contexts/*Context.tsx` files in the `
 Useful authentication functions.
 
 ```tsx
-import { useAuth } from "contexts/AuthContext";
+import { useAuth } from 'contexts/AuthContext';
 ```
 
 Contains:
@@ -170,7 +170,7 @@ const { logout } = useAuth()
 Retrieve user information.
 
 ```tsx
-import { useUser } from "contexts/UserContext";
+import { useUser } from 'contexts/UserContext';
 ```
 
 #### Usage of `useUser`
@@ -191,7 +191,7 @@ const App = () => {
 Handles app versioning. Refer to [Versioning and cache busting](#versioning-and-cache-busting) for more information.
 
 ```tsx
-import { useCache } from "contexts/CacheContext";
+import { useCache } from 'contexts/CacheContext';
 ```
 
 Contains:

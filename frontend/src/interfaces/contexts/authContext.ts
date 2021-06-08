@@ -1,5 +1,5 @@
-import { PersonData } from "interfaces/models/persons";
-import { UserLoginData, UserPostData } from "interfaces/models/users";
+import { PersonData } from 'interfaces/models/persons';
+import { UserLoginData, UserPostData } from 'interfaces/models/users';
 
 export default interface AuthContextInterface {
   data: PersonData | null;

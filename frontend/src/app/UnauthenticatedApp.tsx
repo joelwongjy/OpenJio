@@ -1,10 +1,10 @@
-import React from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import { IonReactRouter } from "@ionic/react-router";
+import React from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { IonReactRouter } from '@ionic/react-router';
 
-import { LOGIN, ROOT, SIGNUP } from "constants/routes";
-import Login from "routes/login";
-import Signup from "routes/signup";
+import { LOGIN, ROOT, SIGNUP } from 'constants/routes';
+import Login from 'routes/login';
+import Signup from 'routes/signup';
 
 const redirectToLogin = (): React.ReactNode => <Redirect to={LOGIN} />;
 

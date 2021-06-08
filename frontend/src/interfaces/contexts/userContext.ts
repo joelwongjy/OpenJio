@@ -1,4 +1,4 @@
-import { PersonData } from "interfaces/models/persons";
+import { PersonData } from 'interfaces/models/persons';
 
 type UserContextInterface = {
   user: PersonData | null;

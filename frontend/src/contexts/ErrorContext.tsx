@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 
 import ErrorContextInterface from 'interfaces/contexts/errorContext';
 
-const ErrorContext =
-  React.createContext<ErrorContextInterface | undefined>(undefined);
+const ErrorContext = React.createContext<ErrorContextInterface | undefined>(undefined);
 
-// Allows user data to be accessible from everywhere
 const ErrorProvider: React.FunctionComponent = (props) => {
   const [hasError, setHasError] = useState<boolean>(false);
   return (

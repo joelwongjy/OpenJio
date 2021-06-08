@@ -1,35 +1,37 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
+  IonButton,
+  IonCol,
   IonContent,
+  IonGrid,
+  IonIcon,
   IonInput,
   IonItem,
-  IonCol,
-  IonPage,
-  IonText,
-  IonButton,
   IonLabel,
   IonLoading,
-  IonIcon,
+  IonPage,
   IonRouterLink,
   IonRow,
-  IonGrid,
-} from "@ionic/react";
-import { fastFood } from "ionicons/icons";
-import "./Login.css";
-import { useAuth } from "contexts/AuthContext";
+  IonText,
+} from '@ionic/react';
+import { fastFood } from 'ionicons/icons';
+
+import { useAuth } from 'contexts/AuthContext';
+
+import './Login.css';
 
 const Login: React.FC = () => {
   const { login } = useAuth();
 
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [showLoading, setShowLoading] = useState(false);
   const [isError, setIsError] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const clearError = () => {
     setIsError(false);
-    setErrorMessage("");
+    setErrorMessage('');
   };
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -53,16 +55,16 @@ const Login: React.FC = () => {
             onDidDismiss={() => setShowLoading(false)}
           />
           <IonRow>
-            <IonIcon icon={fastFood} className="icon"></IonIcon>
+            <IonIcon icon={fastFood} className="icon" />
           </IonRow>
           <IonText className="text">Log In to Open Jio</IonText>
           {isError ? (
             <div
               style={{
-                color: "red",
-                marginTop: "0.5rem",
-                visibility: isError ? "visible" : "hidden",
-                height: "1rem",
+                color: 'red',
+                marginTop: '0.5rem',
+                visibility: isError ? 'visible' : 'hidden',
+                height: '1rem',
               }}
             >
               {errorMessage}
@@ -81,7 +83,7 @@ const Login: React.FC = () => {
                     clearError();
                     setUsername(e.detail.value!);
                   }}
-                ></IonInput>
+                />
               </IonItem>
             </IonCol>
             <IonCol className="ion-padding-bottom">
@@ -94,7 +96,7 @@ const Login: React.FC = () => {
                     clearError();
                     setPassword(e.detail.value!);
                   }}
-                ></IonInput>
+                />
               </IonItem>
             </IonCol>
 
@@ -103,11 +105,11 @@ const Login: React.FC = () => {
             </IonButton>
           </form>
           <IonRow class="ion-padding-vertical">
-            <IonRouterLink href={`/register`}>Forgot password?</IonRouterLink>
+            <IonRouterLink href="/register">Forgot password?</IonRouterLink>
           </IonRow>
           <IonRow>
-            <IonText>Don't have an account?</IonText>
-            <IonRouterLink href={`/signup`}>Sign up</IonRouterLink>
+            <IonText>Don`&apos;`t have an account?</IonText>
+            <IonRouterLink href="/signup">Sign up</IonRouterLink>
           </IonRow>
         </IonGrid>
       </IonContent>

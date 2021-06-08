@@ -1,11 +1,11 @@
-import axios, { AxiosTransformer } from "axios";
-import humps from "humps";
+import axios, { AxiosTransformer } from 'axios';
+import humps from 'humps';
 
-import tokenUtils from "utils/tokenUtils";
+import tokenUtils from 'utils/tokenUtils';
 
 const ApiService = axios.create({
   baseURL: `${process.env.REACT_APP_BACKEND_API}/${process.env.REACT_APP_BACKEND_VERSION}`,
-  headers: { "Content-Type": "application/json" },
+  headers: { 'Content-Type': 'application/json' },
   transformResponse: [
     ...(axios.defaults.transformResponse as AxiosTransformer[]),
     (data) => humps.camelizeKeys(data), // takes care of case issues
@@ -25,7 +25,7 @@ ApiService.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(new Error(error));
-  }
+  },
 );
 
 export default ApiService;

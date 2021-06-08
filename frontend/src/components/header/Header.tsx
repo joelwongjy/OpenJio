@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 import {
-  IonHeader,
-  IonToolbar,
-  IonButtons,
   IonButton,
+  IonButtons,
+  IonHeader,
   IonIcon,
-} from "@ionic/react";
-import { fastFood } from "ionicons/icons";
+  IonToolbar,
+} from '@ionic/react';
+import { fastFood } from 'ionicons/icons';
 
-import { useAuth } from "contexts/AuthContext";
+import { useAuth } from 'contexts/AuthContext';
 
 const Header: React.FC = () => {
   const { logout } = useAuth();
@@ -16,7 +16,7 @@ const Header: React.FC = () => {
   return (
     <IonHeader>
       <IonToolbar>
-        <IonIcon icon={fastFood} className="icon ion-padding"></IonIcon>
+        <IonIcon icon={fastFood} className="icon ion-padding" />
         <IonButtons slot="primary">
           <IonButton onClick={logout}>Logout</IonButton>
         </IonButtons>

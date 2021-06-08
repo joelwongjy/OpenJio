@@ -1,13 +1,13 @@
-import { DiscardableData } from "./base";
-import { UserData } from "./users";
+import { DiscardableData } from './base';
+import { UserData } from './users';
 
 /* ==================
   TYPES FROM BACKEND
  ================== */
 
 export enum Gender {
-  MALE = "Male",
-  FEMALE = "Female",
+  MALE = 'Male',
+  FEMALE = 'Female',
 }
 
 export interface PersonPostData {

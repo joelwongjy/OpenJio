@@ -1,6 +1,6 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-import misc, { MiscDux } from "reducers/miscDux";
+import misc, { MiscDux } from 'reducers/miscDux';
 
 export interface RootState {
   misc: MiscDux;
