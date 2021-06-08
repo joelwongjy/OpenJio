@@ -52,8 +52,11 @@ jobs:
       - name: Install dependencies
         working-directory: ./backend
         run: npm ci
+      - name: Run tests
+        working-directory: ./backend
+        run: npm test:ci
       - uses: mattallty/jest-github-action@v1
-        name: Run tests and get coverage
+        name: Get coverage
         env:
           # The hostname used to communicate with the PostgreSQL service container
           POSTGRES_HOST: localhost

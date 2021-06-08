@@ -63,8 +63,8 @@
     "start": "set debug=* && cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only ./src/index.ts",
     "typeorm": "ts-node -r tsconfig-paths/register ../node_modules/typeorm/cli.js",
     "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit",
-    "test:ci": "jest --verbose --forceExit --runInBand",
-    "coverage": "npm test -- --coverage",
+    "test:ci": "jest --verbose --forceExit --runInBand --json --outputFile=/home/runner/work/_actions/mattallty/jest-github-action/v1/dist/jest.results.json",
+    "coverage": "npm test --coverage",
     "production": "cd build && cross-env NODE_ENV=production node ./src/index.js",
     "build": "tsc --build",
     "clean": "tsc --build --clean"
