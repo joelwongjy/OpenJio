@@ -1,10 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
   appName: 'frontend',
   webDir: 'build',
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
 };
 
 export default config;

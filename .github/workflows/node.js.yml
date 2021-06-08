@@ -1,0 +1,72 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master, production]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x]
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: quest
+          POSTGRES_PASSWORD: quest
+          POSTGRES_DB: quest
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        working-directory: "backend"
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache npm dependencies
+        uses: actions/cache@v2
+        working-directory: "backend"
+        with:
+          path: '~/.npm'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+        working-directory: "backend"
+      - name: Run tests
+        run: npm test
+        working-directory: "backend"
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: localhost
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
+          POSTGRES_USERNAME: jojo
+          POSTGRES_PASSWORD: jojo
+          POSTGRES_NAME: openjio
+          POSTGRES_DISABLE_SSL: true
+          POSTGRES_SYNCHRONISE: true
+          JWT_SECRET: hellojoseph
