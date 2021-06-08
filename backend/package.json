@@ -37,7 +37,7 @@
     "cross-env": "^7.0.2",
     "faker": "^5.1.0",
     "husky": "^4.2.5",
-    "jest": "^26.4.2",
+    "jest": "^26.6.3",
     "lint-staged": "^10.3.0",
     "prettier": "^2.1.1",
     "pretty-quick": "^3.0.0",
@@ -62,7 +62,7 @@
     "lint": "prettier --write \"src/**/*.{ts,tsx}\" --tab-width 2",
     "start": "set debug=* && cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only ./src/index.ts",
     "typeorm": "ts-node -r tsconfig-paths/register ../node_modules/typeorm/cli.js",
-    "test": "jest --runInBand",
+    "test": "jest",
     "build": "tsc && cp package.json ./build/ && cd build && yarn install",
     "production": "cd build && cross-env NODE_ENV=production node ./src/index.js"
   }
