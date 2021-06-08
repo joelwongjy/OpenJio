@@ -62,8 +62,11 @@
     "lint": "prettier --write \"src/**/*.{ts,tsx}\" --tab-width 2",
     "start": "set debug=* && cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only ./src/index.ts",
     "typeorm": "ts-node -r tsconfig-paths/register ../node_modules/typeorm/cli.js",
-    "test": "jest",
-    "build": "tsc && cp package.json ./build/ && cd build && yarn install",
-    "production": "cd build && cross-env NODE_ENV=production node ./src/index.js"
+    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit",
+    "test:ci": "jest --verbose --forceExit --runInBand",
+    "coverage": "yarn test --coverage",
+    "production": "cd build && cross-env NODE_ENV=production node ./src/index.js",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
   }
 }
