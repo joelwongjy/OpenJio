@@ -54,7 +54,7 @@ jobs:
         run: npm ci
       - name: Run tests
         working-directory: ./backend
-        run: npm test:ci
+        run: npm run test:ci
       - uses: mattallty/jest-github-action@v1
         name: Get coverage
         env:
