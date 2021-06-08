@@ -25,9 +25,9 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_USER: quest
-          POSTGRES_PASSWORD: quest
-          POSTGRES_DB: quest
+          POSTGRES_USER: jojo
+          POSTGRES_PASSWORD: jojo
+          POSTGRES_DB: openjio
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
