@@ -143,25 +143,22 @@ const Login: React.FC = () => {
             </form>
 
             <div className="flex items-center">
-              <p
-                
-                className="mr-1 text-sm text-gray-900"
-              >
+              <p className="mr-1 text-sm text-gray-900">
                 Don&apos;t have an account?
               </p>
               <div className="text-sm">
-                  <a
-                    href="/signup"
-                    className="font-medium text-indigo-600 hover:text-indigo-500"
-                  >
-                    Sign up
-                  </a>
-                </div>
+                <a
+                  href="/signup"
+                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                >
+                  Sign up
+                </a>
+              </div>
             </div>
 
             {isError ? (
               <div
-              className="text-sm font-medium text-red-500"
+                className="text-sm font-medium text-red-500"
                 style={{
                   marginTop: '0.5rem',
                   visibility: isError ? 'visible' : 'hidden',
