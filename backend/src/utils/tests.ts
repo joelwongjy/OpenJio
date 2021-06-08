@@ -37,7 +37,7 @@ export class Fixtures {
 
 export async function loadFixtures(_apiServer: ApiServer): Promise<Fixtures> {
   const users: User[] = [];
-  const user = new User("admin", "Admin", "setMeUp?", "setMeUp?");
+  const user = new User("admin", "Admin", "test@gmail.com", "setMeUp?", "setMeUp?");
   users.push(user);
 
   await getRepository(User).save(users);
