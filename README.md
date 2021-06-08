@@ -1,5 +1,7 @@
 # OpenJio
 
+![CI Badge](https://github.com/joelwongjy/OpenJio/workflows/ESLint%20CI/badge.svg)
+
 ### NUS Orbital (CP2106 Independent Software Development Project)<br>
 Team JoJo's Circus #2582<br>
 Joel Wong & Joseph Marcus<br>
