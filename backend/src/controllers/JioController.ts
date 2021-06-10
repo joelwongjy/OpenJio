@@ -1,7 +1,22 @@
 import { Request, Response } from "express";
-import { JioCreator } from "../services/jio";
+import { JioCreator, JioGetter } from "../services/jio";
 import { SuccessId } from "src/types/errors";
-import { JioPostData } from "src/types/jios";
+import { JioListData, JioPostData } from "src/types/jios";
+
+export async function index(
+  _request: Request<{}, any, any, any>,
+  response: Response<SuccessId | { jios: JioListData[] }>
+): Promise<void> {
+  try {
+    const jios = await new JioGetter().getJioList();
+    response.status(200).json({ jios });
+    return;
+  } catch (e) {
+    console.log(e);
+    response.status(400).json({ success: false });
+    return;
+  }
+}
 
 export async function create(
   request: Request<{}, any, JioPostData, any>,
@@ -11,6 +26,7 @@ export async function create(
     const jio = await new JioCreator().createJio(request.body);
 
     response.status(200).json({ success: true, id: jio.id });
+    console.log(jio)
     return;
   } catch (e) {
     console.log(e);
