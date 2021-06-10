@@ -5,6 +5,7 @@ import {
   Entity,
   getRepository,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
 } from "typeorm";
@@ -48,11 +49,11 @@ export class Jio extends Discardable {
   @Min(0)
   orderLimit?: number;
 
-  @ManyToOne((type) => User, (user) => user.openJios)
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.openJios)
   user: User;
 
-  @ManyToMany((type) => User)
+  @ManyToMany(() => User, (user) => user.joinedJios)
+  @JoinTable()
   joinedUsers!: User[];
 
   getListData = async (): Promise<JioListData> => {

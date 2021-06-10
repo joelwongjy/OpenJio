@@ -67,8 +67,7 @@ export class User extends Discardable {
   @OneToMany((type) => Jio, (jio) => jio.user)
   openJios!: Jio[];
 
-  @ManyToMany(() => Jio)
-  @JoinTable()
+  @ManyToMany((type) => Jio, (jio) => jio.joinedUsers)
   joinedJios!: Jio[];
 
   @BeforeInsert()
