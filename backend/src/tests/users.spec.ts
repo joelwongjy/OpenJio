@@ -1,6 +1,6 @@
 import request from "supertest";
-import { ApiServer } from "../../server";
-import { Fixtures, loadFixtures, synchronize } from "../../utils/tests";
+import { ApiServer } from "../server";
+import { Fixtures, loadFixtures, synchronize } from "../utils/tests";
 
 let server: ApiServer;
 let fixtures: Fixtures;

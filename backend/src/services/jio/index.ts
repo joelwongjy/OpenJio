@@ -1,1 +1,1 @@
-export { JioCreator, JioGetter } from "./jio";
+export { JioCreator, JioGetter, JioDeleter } from "./jio";

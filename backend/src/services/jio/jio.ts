@@ -29,9 +29,7 @@ export class JioGetter {
       where: {
         closeAt: MoreThan(new Date()),
       },
-      relations: [
-        "joinedUsers",
-      ]
+      relations: ["joinedUsers"],
     });
     const result = query.map((j) => {
       return {
@@ -50,9 +48,7 @@ export class JioGetter {
   public async getJio(id: number): Promise<JioData | undefined> {
     const jio = await getRepository(Jio).findOne({
       where: { id },
-      relations: [
-        "joinedUsers"
-      ],
+      relations: ["joinedUsers"],
     });
 
     if (!jio) {
@@ -68,7 +64,7 @@ export class JioGetter {
       orderLimit: jio.orderLimit,
       orderCount: jio.joinedUsers.length,
       joinedUsers: jio.joinedUsers,
-      paymentNumber: jio.paymentNumber
+      paymentNumber: jio.paymentNumber,
     };
 
     return result;
@@ -91,5 +87,17 @@ export class JioCreator {
 
     jio = await getRepository(Jio).save(jio);
     return jio;
+  }
+}
+
+export class JioDeleter {
+  public async deleteJio(id: number) {
+    const jio = await getRepository(Jio).findOneOrFail({
+      select: ["id"],
+      where: { id },
+      relations: ["joinedUsers"],
+    });
+    
+    await getRepository(Jio).remove(jio);
   }
 }
