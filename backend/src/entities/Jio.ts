@@ -1,4 +1,5 @@
 import { IsInt, IsNotEmpty, IsPhoneNumber, Min } from "class-validator";
+import _ from "lodash";
 import { JioData, JioListData } from "src/types/jios";
 import {
   Column,
@@ -8,8 +9,10 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { Discardable } from "./Discardable";
+import { Order } from "./Order";
 import { User } from "./User";
 
 @Entity()
@@ -52,16 +55,21 @@ export class Jio extends Discardable {
   @ManyToOne(() => User, (user) => user.openJios)
   user: User;
 
-  @ManyToMany(() => User, (user) => user.joinedJios)
-  @JoinTable()
-  joinedUsers!: User[];
+  @OneToMany(() => Order, (order) => order.jio)
+  orders!: Order[];
+
+  getOrders = async (): Promise<Order[]> => {
+    const orders = (
+      await getRepository(Jio).findOneOrFail({
+        where: { id: this.id },
+        relations: ["orders"],
+      })
+    ).orders;
+    return orders;
+  };
 
   getListData = async (): Promise<JioListData> => {
-    const orderCount =
-      this.joinedUsers?.length ||
-      (await getRepository(User).count({
-        where: { joinedJios: { id: this.id } },
-      }));
+    const orderCount = this.orders.length || (await this.getOrders()).length;
     return {
       ...this.getBase(),
       name: this.name,
@@ -72,15 +80,10 @@ export class Jio extends Discardable {
   };
 
   getData = async (): Promise<JioData> => {
-    const joinedUsers =
-      this.joinedUsers ||
-      (await getRepository(User).find({
-        where: { joinedJios: { id: this.id } },
-      }));
-
+    const orders = this.orders || this.getOrders();
     return {
       ...(await this.getListData()),
-      joinedUsers,
+      orders,
       paymentNumber: this.paymentNumber,
     };
   };
