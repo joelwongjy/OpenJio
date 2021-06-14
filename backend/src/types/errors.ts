@@ -1,7 +1,6 @@
 export interface Message {
   message: string;
 }
-
 export interface SuccessId {
   success: boolean;
   id?: number;
@@ -10,3 +9,4 @@ export interface SuccessId {
 export const TYPEORM_ENTITYNOTFOUND = "EntityNotFound";
 
 export const JIO_CREATOR_ERROR = "JioCreatorError";
+export const JIO_EDITOR_ERROR = "JioEditorError";
