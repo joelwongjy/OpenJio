@@ -83,7 +83,7 @@ export class Jio extends Discardable {
     const orders = this.orders || this.getOrders();
     return {
       ...(await this.getListData()),
-      orders,
+      orders: await Promise.all(orders.map((order) => order.getListData())),
       paymentNumber: this.paymentNumber,
     };
   };
