@@ -1,9 +1,5 @@
 import { IsNotEmpty } from "class-validator";
-import {
-  Column,
-  Entity,
-  ManyToOne,
-} from "typeorm";
+import { Column, Entity, ManyToOne } from "typeorm";
 import { Discardable } from "./Discardable";
 import { Order } from "./Order";
 
@@ -11,12 +7,11 @@ import { Order } from "./Order";
 export class Item extends Discardable {
   entityName = "Item";
 
-  constructor(name: string, quantity: number, order: Order, cost?: number) {
+  constructor(name: string, quantity: number, cost?: number) {
     super();
     this.name = name;
     this.quantity = quantity;
     this.cost = cost;
-    this.order = order;
   }
 
   @Column()
@@ -31,5 +26,5 @@ export class Item extends Discardable {
   cost?: number;
 
   @ManyToOne((type) => Order, (order) => order.items)
-  order: Order;
+  order!: Order;
 }
