@@ -67,9 +67,6 @@ export class User extends Discardable {
   @OneToMany((type) => Jio, (jio) => jio.user)
   openJios!: Jio[];
 
-  @ManyToMany((type) => Jio, (jio) => jio.joinedUsers)
-  joinedJios!: Jio[];
-
   @BeforeInsert()
   @BeforeUpdate()
   hashPassword() {
@@ -104,31 +101,5 @@ export class User extends Discardable {
 
   getData = (): UserData => {
     return this.getListData();
-  };
-
-  getOpenJioData = async (): Promise<JioListData[]> => {
-    const jios =
-      this.openJios ||
-      (
-        await getRepository(User).findOneOrFail({
-          where: { id: this.id },
-          relations: ["openJios"],
-        })
-      ).openJios;
-
-    return await Promise.all(jios.map((j: Jio) => j.getListData()));
-  };
-
-  getJoinedJioData = async (): Promise<JioListData[]> => {
-    const jios =
-      this.joinedJios ||
-      (
-        await getRepository(User).findOneOrFail({
-          where: { id: this.id },
-          relations: ["joinedJios"],
-        })
-      ).openJios;
-
-    return await Promise.all(jios.map((j: Jio) => j.getListData()));
   };
 }
