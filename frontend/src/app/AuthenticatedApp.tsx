@@ -5,12 +5,10 @@ import {
 import { IonApp } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
-import {
-  CREATE, HOME, ROOT, UNAUTHED_ROUTES,
+import { HOME, ROOT, UNAUTHED_ROUTES,
 } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import Home from 'routes/home';
-import CreateJio from 'routes/jios/create';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
@@ -29,7 +27,6 @@ const App: React.FC = () => {
         <Switch>
           <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
           <Route path={HOME} component={Home} />
-          <Route path={CREATE} component={CreateJio} />
           <Route path="/" render={redirectToHome} />
         </Switch>
       </IonReactRouter>

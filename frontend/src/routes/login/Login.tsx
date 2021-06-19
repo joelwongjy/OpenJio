@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { IonContent, IonLoading, IonPage } from '@ionic/react';
 
+import Google from 'components/google';
 import { useAuth } from 'contexts/AuthContext';
 
 const Login: React.FC = () => {
@@ -41,11 +42,11 @@ const Login: React.FC = () => {
             <div>
               <img
                 className="mx-auto h-12 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                src="/images/hamburger.svg"
                 alt="OpenJio"
               />
               <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Sign in to OpenJio
+                Sign in to Open Jio
               </h2>
             </div>
             <form className="mt-8 space-y-6" onSubmit={handleLogin}>
@@ -142,6 +143,10 @@ const Login: React.FC = () => {
               </div>
             </form>
 
+            <div className ="flex items-center">
+                  <Google />
+            </div>
+            
             <div className="flex items-center">
               <p className="mr-1 text-sm text-gray-900">
                 Don&apos;t have an account?
@@ -149,7 +154,7 @@ const Login: React.FC = () => {
               <div className="text-sm">
                 <a
                   href="/signup"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                  className="font-medium text-indigo-600 hover:text-indigo-500 mr-5"
                 >
                   Sign up
                 </a>
