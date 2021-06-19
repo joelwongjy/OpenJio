@@ -14,7 +14,6 @@ import {
   IonRow,
   IonText,
 } from '@ionic/react';
-import { fastFood } from 'ionicons/icons';
 
 import { useAuth } from 'contexts/AuthContext';
 
