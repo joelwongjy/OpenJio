@@ -11,8 +11,6 @@ import { add } from 'ionicons/icons';
 import { CREATE } from 'constants/routes';
 import { useUser } from 'contexts/UserContext';
 
-import './Home.css';
-
 import ExploreContainer from '../../components/ExploreContainer';
 import Header from '../../components/header';
 

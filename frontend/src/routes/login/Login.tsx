@@ -45,7 +45,7 @@ const Login: React.FC = () => {
                 src="/images/hamburger.svg"
                 alt="OpenJio"
               />
-              <h2 className="mt-6 text-center text-3xl font-extrabold text-black-900">
+              <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                 Sign in to Open Jio
               </h2>
             </div>

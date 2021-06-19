@@ -1,23 +1,12 @@
 import React, { useState } from 'react';
 import {
-  IonButton,
-  IonCol,
   IonContent,
   IonGrid,
-  IonIcon,
-  IonInput,
-  IonItem,
-  IonLabel,
   IonLoading,
   IonPage,
-  IonRouterLink,
-  IonRow,
-  IonText,
 } from '@ionic/react';
 
 import { useAuth } from 'contexts/AuthContext';
-
-import './Signup.css';
 
 const Signup: React.FC = () => {
   const { signup } = useAuth();
@@ -70,7 +59,7 @@ const Signup: React.FC = () => {
                   src="/images/hamburger.svg"
                   alt="OpenJio"
                 />
-                <h2 className="mt-6 text-center text-3xl font-extrabold text-black-900">
+                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                   Create Your Account
                 </h2>
               </div>
@@ -79,6 +68,24 @@ const Signup: React.FC = () => {
                   <input type="hidden" name="remember" value="true" />
                   <div className="rounded-md shadow-sm -space-y-px">
                     <div>
+                    <label htmlFor="name" className="sr-only">
+                        Name
+                      </label>
+                      <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        autoComplete="name"
+                        required
+                        className="h-12 appearance-none leading-8 rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        placeholder="Name"
+                        value={name}
+                        onChange={(e) => {
+                          clearError();
+                          setName(e.target.value!);
+                        }}
+                      />
+
                       <label htmlFor="username" className="sr-only">
                         Username
                       </label>
@@ -88,7 +95,7 @@ const Signup: React.FC = () => {
                         type="text"
                         autoComplete="username"
                         required
-                        className="h-12 appearance-none leading-8 rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         placeholder="Username"
                         value={username}
                         onChange={(e) => {
