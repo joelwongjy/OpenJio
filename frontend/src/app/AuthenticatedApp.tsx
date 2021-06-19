@@ -5,8 +5,7 @@ import {
 import { IonApp } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
-import {
-  CREATE, HOME, ROOT, UNAUTHED_ROUTES,
+import { HOME, ROOT, UNAUTHED_ROUTES,
 } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import Home from 'routes/home';
