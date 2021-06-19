@@ -103,7 +103,9 @@ export class JioGetter {
       return undefined;
     }
 
-    const orders = await Promise.all(jio.orders.map((order) => order.getListData()));
+    const orders = await Promise.all(
+      jio.orders.map((order) => order.getListData())
+    );
 
     const result: JioData = {
       ...jio.getBase(),
@@ -125,7 +127,7 @@ export class JioCreator {
     const { name, closeAt, paymentNumber, userId, orderLimit } = createData;
 
     const user = await getRepository(User).findOneOrFail({
-      where: {userId}
+      where: { userId },
     });
 
     let jio: Jio = new Jio(name, closeAt, paymentNumber, user, orderLimit);
@@ -223,10 +225,10 @@ export class JioEditor {
       const { userId } = order;
 
       const user = await getRepository(User).findOneOrFail({
-        where: {userId}
+        where: { userId },
       });
-      
-      if (!userId ) {
+
+      if (!userId) {
         throw new JioEditorError(
           `Could not create new order as no userId was given`
         );
@@ -329,7 +331,7 @@ export class OrderEditor {
           toKeep.push(i);
           itemMap.delete(item.id);
         }
-  
+
         const { name, quantity, cost } = item;
         if (!name || !quantity) {
           throw new JioEditorError(

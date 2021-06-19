@@ -13,7 +13,7 @@ export class Order extends Discardable {
     super();
     this.user = user;
     this.paid = false;
-    this.jio = jio
+    this.jio = jio;
   }
 
   @Column()

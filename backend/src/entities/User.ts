@@ -1,13 +1,7 @@
 import { hashSync } from "bcryptjs";
 import { IsNotEmpty, IsString, MinLength, Validate } from "class-validator";
 import { sign } from "jsonwebtoken";
-import {
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  Entity,
-  OneToMany,
-} from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from "typeorm";
 import IsUniqueUsername from "../constraints/IsUniqueUsername";
 import Match from "../constraints/IsMatch";
 import { AuthenticationData } from "../types/auth";
@@ -15,7 +9,6 @@ import { BearerTokenType } from "../types/tokens";
 import { UserData, UserListData } from "../types/users";
 import { Discardable } from "./Discardable";
 import { Jio } from "./Jio";
-import { JioListData } from "src/types/jios";
 import { Order } from "./Order";
 
 @Entity()

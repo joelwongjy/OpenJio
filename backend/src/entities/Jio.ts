@@ -1,13 +1,7 @@
 import { IsInt, IsNotEmpty, IsPhoneNumber, Min } from "class-validator";
 import _ from "lodash";
 import { JioData, JioListData } from "src/types/jios";
-import {
-  Column,
-  Entity,
-  getRepository,
-  ManyToOne,
-  OneToMany,
-} from "typeorm";
+import { Column, Entity, getRepository, ManyToOne, OneToMany } from "typeorm";
 import { Discardable } from "./Discardable";
 import { Order } from "./Order";
 import { User } from "./User";
