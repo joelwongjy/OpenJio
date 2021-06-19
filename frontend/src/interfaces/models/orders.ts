@@ -1,5 +1,5 @@
-import { Item } from "src/entities/item";
-import { DiscardableData } from "./entities";
+import { DiscardableData } from "./base";
+import { ItemListData } from "./items";
 
 export interface OrderPatchData {
   paid?: boolean;
@@ -18,5 +18,5 @@ export interface OrderListData extends DiscardableData {
 }
 
 export interface OrderData extends OrderListData {
-  items: Item[];
+  items: ItemListData[];
 }

@@ -1,16 +1,7 @@
 import { IsInt, IsNotEmpty, IsPhoneNumber, Min } from "class-validator";
 import _ from "lodash";
 import { JioData, JioListData } from "src/types/jios";
-import {
-  Column,
-  Entity,
-  getRepository,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from "typeorm";
+import { Column, Entity, getRepository, ManyToOne, OneToMany } from "typeorm";
 import { Discardable } from "./Discardable";
 import { Order } from "./Order";
 import { User } from "./User";
@@ -74,7 +65,7 @@ export class Jio extends Discardable {
       ...this.getBase(),
       name: this.name,
       closeAt: this.closeAt,
-      user: this.user,
+      username: this.user.username,
       orderCount,
     };
   };

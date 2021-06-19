@@ -1,6 +1,6 @@
-import { User } from "src/entities/User";
-import { DiscardableData } from "./entities";
-import { OrderListData } from "./orders";
+import { DiscardableData } from './base';
+import { OrderListData } from './orders';
+
 export interface JioPatchData {
   name?: string;
   closeAt?: Date;
@@ -12,6 +12,7 @@ export interface JioPatchData {
     paid?: boolean;
   }[];
 }
+
 export interface JioPostData {
   name: string;
   closeAt: Date;
@@ -19,6 +20,7 @@ export interface JioPostData {
   userId: number;
   orderLimit?: number;
 }
+
 export interface JioListData extends DiscardableData {
   name: string;
   createdAt: Date;
@@ -27,10 +29,12 @@ export interface JioListData extends DiscardableData {
   orderLimit?: number;
   orderCount: number;
 }
+
 export interface JioUserData {
   joined: JioListData[];
   opened: JioListData[];
 }
+
 export interface JioData extends JioListData {
   orders: OrderListData[];
   paymentNumber: string;
