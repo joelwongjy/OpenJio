@@ -2,9 +2,13 @@ import { Item } from "src/entities/item";
 import { DiscardableData } from "./entities";
 
 export interface OrderPatchData {
-  userId?: number;
   paid?: boolean;
-  items: Item[];
+  items?: {
+    id: number;
+    name?: string;
+    quantity?: number;
+    cost?: number;
+  }[];
 }
 
 export interface OrderListData extends DiscardableData {

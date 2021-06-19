@@ -5,9 +5,6 @@ import {
   Column,
   Entity,
   getRepository,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
 } from "typeorm";
@@ -74,7 +71,7 @@ export class Jio extends Discardable {
       ...this.getBase(),
       name: this.name,
       closeAt: this.closeAt,
-      user: this.user,
+      username: this.user.username,
       orderCount,
     };
   };

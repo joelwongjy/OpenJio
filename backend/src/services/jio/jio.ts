@@ -2,6 +2,7 @@ import { validate } from "class-validator";
 import { Item } from "../../entities/Item";
 import { Jio } from "../../entities/Jio";
 import { Order } from "../../entities/Order";
+import { User } from "../../entities/User";
 import {
   JIO_CREATOR_ERROR,
   JIO_EDITOR_ERROR,
@@ -62,7 +63,7 @@ export class JioGetter {
         name: j.name,
         createdAt: j.createdAt,
         closeAt: j.closeAt,
-        user: j.user,
+        username: j.user.username,
         orderLimit: j.orderLimit,
         orderCount: j.orders.length,
       };
@@ -83,7 +84,7 @@ export class JioGetter {
         name: j.name,
         createdAt: j.createdAt,
         closeAt: j.closeAt,
-        user: j.user,
+        username: j.user.username,
         orderLimit: j.orderLimit,
         orderCount: j.orders.length,
       };
@@ -109,7 +110,7 @@ export class JioGetter {
       name: jio.name,
       createdAt: jio.createdAt,
       closeAt: jio.closeAt,
-      user: jio.user,
+      username: jio.user.username,
       orderLimit: jio.orderLimit,
       orderCount: jio.orders.length,
       orders,
@@ -121,7 +122,11 @@ export class JioGetter {
 }
 export class JioCreator {
   public async createJio(createData: JioPostData): Promise<Jio> {
-    const { name, closeAt, paymentNumber, user, orderLimit } = createData;
+    const { name, closeAt, paymentNumber, userId, orderLimit } = createData;
+
+    const user = await getRepository(User).findOneOrFail({
+      where: {userId}
+    });
 
     let jio: Jio = new Jio(name, closeAt, paymentNumber, user, orderLimit);
     const errors = await validate(jio);
@@ -207,7 +212,7 @@ export class JioEditor {
     const toCreate: Order[] = [];
     const toDelete: Order[] = [];
 
-    editData.orders.forEach((order) => {
+    editData.orders.forEach(async (order) => {
       if (order.id && orderMap.has(order.id)) {
         const orderInMap = orderMap.get(order.id)!;
         toKeep.push(orderInMap);
@@ -215,13 +220,18 @@ export class JioEditor {
         return;
       }
 
-      const { userId, items } = order;
-      if (!userId || !items) {
+      const { userId } = order;
+
+      const user = await getRepository(User).findOneOrFail({
+        where: {userId}
+      });
+      
+      if (!userId ) {
         throw new JioEditorError(
-          `Could not create new order as no userId or items were given`
+          `Could not create new order as no userId was given`
         );
       }
-      toCreate.push(new Order(userId, items));
+      toCreate.push(new Order(user, jio));
     });
 
     orderMap.forEach((order) => {
@@ -297,11 +307,8 @@ export class OrderEditor {
       throw new OrderEditorError(`No class found for id ${id}`);
     }
 
-    const { userId, paid, items } = editData;
+    const { paid, items } = editData;
 
-    if (userId) {
-      order.userId = userId;
-    }
     if (paid !== undefined) {
       order.paid = paid;
     }
@@ -315,21 +322,23 @@ export class OrderEditor {
     const toDelete: Item[] = [];
     let toCreate: Item[] = [];
 
-    items.forEach((item) => {
-      if (item.id && itemMap.has(item.id)) {
-        const i = itemMap.get(item.id)!;
-        toKeep.push(i);
-        itemMap.delete(item.id);
-      }
-
-      const { name, quantity, cost } = item;
-      if (!name || !quantity) {
-        throw new JioEditorError(
-          `Could not create new order as no name or quantity were given`
-        );
-      }
-      toCreate.push(new Item(name, quantity));
-    });
+    if (items) {
+      items.forEach((item) => {
+        if (item.id && itemMap.has(item.id)) {
+          const i = itemMap.get(item.id)!;
+          toKeep.push(i);
+          itemMap.delete(item.id);
+        }
+  
+        const { name, quantity, cost } = item;
+        if (!name || !quantity) {
+          throw new JioEditorError(
+            `Could not create new item as no name or quantity were given`
+          );
+        }
+        toCreate.push(new Item(name, quantity));
+      });
+    }
 
     itemMap.forEach((item) => {
       toDelete.push(item);

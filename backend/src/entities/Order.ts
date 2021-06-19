@@ -1,24 +1,20 @@
-import { IsNotEmpty } from "class-validator";
 import { Column, Entity, getRepository, ManyToOne, OneToMany } from "typeorm";
 import { Discardable } from "./Discardable";
 import { Jio } from "./Jio";
 import { Item } from "./Item";
 import { OrderData, OrderListData } from "src/types/orders";
+import { User } from "./User";
 
 @Entity()
 export class Order extends Discardable {
   entityName = "Order";
 
-  constructor(userId: number, items: Item[], paid?: boolean) {
+  constructor(user: User, jio: Jio) {
     super();
-    this.userId = userId;
-    this.paid = paid ?? false;
-    this.items = items;
+    this.user = user;
+    this.paid = false;
+    this.jio = jio
   }
-
-  @Column()
-  @IsNotEmpty()
-  userId: number;
 
   @Column()
   paid: boolean;
@@ -28,6 +24,9 @@ export class Order extends Discardable {
 
   @ManyToOne((type) => Jio, (jio) => jio.orders)
   jio!: Jio;
+
+  @ManyToOne(() => User, (user) => user.orders)
+  user: User;
 
   getItems = async (): Promise<Item[]> => {
     const items = (
