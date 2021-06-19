@@ -41,11 +41,11 @@ const Login: React.FC = () => {
             <div>
               <img
                 className="mx-auto h-12 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                src="/images/hamburger.svg"
                 alt="OpenJio"
               />
-              <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Sign in to OpenJio
+              <h2 className="mt-6 text-center text-3xl font-extrabold text-black-900">
+                Sign in to Open Jio
               </h2>
             </div>
             <form className="mt-8 space-y-6" onSubmit={handleLogin}>
