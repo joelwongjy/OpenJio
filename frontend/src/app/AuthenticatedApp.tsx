@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import {
-  Redirect, Route, Switch, useLocation,
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+  useLocation,
 } from 'react-router-dom';
-import { IonApp } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
 
-import { HOME, ROOT, UNAUTHED_ROUTES,
-} from 'constants/routes';
+import { HOME, ROOT, UNAUTHED_ROUTES } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import Home from 'routes/home';
 
@@ -22,15 +23,13 @@ const App: React.FC = () => {
   }, [pathname, setHasError]);
 
   return (
-    <IonApp>
-      <IonReactRouter>
-        <Switch>
-          <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
-          <Route path={HOME} component={Home} />
-          <Route path="/" render={redirectToHome} />
-        </Switch>
-      </IonReactRouter>
-    </IonApp>
+    <Router>
+      <Switch>
+        <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
+        <Route path={HOME} component={Home} />
+        <Route path="/" render={redirectToHome} />
+      </Switch>
+    </Router>
   );
 };
 

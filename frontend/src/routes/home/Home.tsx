@@ -1,34 +1,17 @@
 import React from 'react';
-import {
-  IonContent,
-  IonFab,
-  IonFabButton,
-  IonIcon,
-  IonPage,
-} from '@ionic/react';
-import { add } from 'ionicons/icons';
 
-import { CREATE } from 'constants/routes';
+import { useAuth } from 'contexts/AuthContext';
 import { useUser } from 'contexts/UserContext';
-
-import ExploreContainer from '../../components/ExploreContainer';
-import Header from '../../components/header';
 
 const Home: React.FC = () => {
   const { user } = useUser();
+  const { logout } = useAuth();
 
   return (
-    <IonPage>
-      <IonContent fullscreen>
-        <Header />
-        <ExploreContainer name={`Welcome, ${user ? user.name : ''}!`} />
-        <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton href={`${CREATE}`}>
-            <IonIcon icon={add} />
-          </IonFabButton>
-        </IonFab>
-      </IonContent>
-    </IonPage>
+    <div>
+      <h1>Welcome, {user ? user.name : ''}!</h1>
+      <button type="button" onClick={logout}>Logout</button>
+    </div>
   );
 };
 
