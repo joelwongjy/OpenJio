@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import store, { persistor } from 'app/store';
@@ -16,7 +18,9 @@ ReactDOM.render(
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <BrowserRouter>
-            <App />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <App />
+            </MuiPickersUtilsProvider>
           </BrowserRouter>
         </PersistGate>
       </Provider>
