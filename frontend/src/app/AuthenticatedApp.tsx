@@ -7,9 +7,10 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import { HOME, ROOT, UNAUTHED_ROUTES } from 'constants/routes';
+import { CREATE, HOME, ROOT, UNAUTHED_ROUTES } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import Home from 'routes/home';
+import CreateJio from 'routes/jios/create';
 
 const redirectToRoot = (): React.ReactNode => <Redirect to={ROOT} />;
 const redirectToHome = (): React.ReactNode => <Redirect to={HOME} />;
@@ -27,6 +28,7 @@ const App: React.FC = () => {
       <Switch>
         <Route exact path={UNAUTHED_ROUTES} render={redirectToRoot} />
         <Route path={HOME} component={Home} />
+        <Route path={CREATE} component={CreateJio} />
         <Route path="/" render={redirectToHome} />
       </Switch>
     </Router>

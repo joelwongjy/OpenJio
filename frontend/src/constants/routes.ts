@@ -6,4 +6,6 @@ export const SIGNUP = '/signup';
 export const UNAUTHED_ROUTES = [LOGIN];
 
 export const HOME = '/home';
+export const JIO = '/jios';
+
 export const CREATE = '/create';

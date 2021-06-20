@@ -124,11 +124,7 @@ export class JioGetter {
 }
 export class JioCreator {
   public async createJio(createData: JioPostData): Promise<Jio> {
-    const { name, closeAt, paymentNumber, userId, orderLimit } = createData;
-
-    const user = await getRepository(User).findOneOrFail({
-      where: { userId },
-    });
+    const { name, closeAt, paymentNumber, user, orderLimit } = createData;
 
     let jio: Jio = new Jio(name, closeAt, paymentNumber, user, orderLimit);
     const errors = await validate(jio);
