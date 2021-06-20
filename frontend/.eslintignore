@@ -1,3 +1,4 @@
 src/serviceWorker.ts
 src/reportWebVitals.ts
+tailwind.config.js
 node_modules
