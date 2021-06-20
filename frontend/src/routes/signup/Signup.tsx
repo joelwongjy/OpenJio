@@ -64,7 +64,7 @@ const Signup: React.FC = () => {
                     type="text"
                     autoComplete="name"
                     required
-                    className="h-12 appearance-none leading-8 rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-orange focus:border-orange focus:z-10 sm:text-sm"
+                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-orange focus:border-orange focus:z-10 sm:text-sm"
                     placeholder="Name"
                     value={name}
                     onChange={(e) => {
@@ -72,13 +72,15 @@ const Signup: React.FC = () => {
                       setName(e.target.value!);
                     }}
                   />
+                </div>
 
+                <div>
                   <label htmlFor="username" className="sr-only">
                     Username
                   </label>
                   <input
-                    id="email-address"
-                    name="email"
+                    id="username"
+                    name="username"
                     type="text"
                     autoComplete="username"
                     required
