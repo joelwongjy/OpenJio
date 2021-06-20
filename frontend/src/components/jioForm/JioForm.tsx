@@ -80,7 +80,6 @@ const JioForm: React.FC<JioFormProps> = ({
         user,
       });
       if (response.status === 200) {
-        console.log('success');
         history.push('/');
       }
     } catch (e) {
