@@ -54,7 +54,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --fix --ext .js,.jsx,.ts,.tsx",
-    "prepare": "cd .. && husky install frontend/.husky"
+    "prepare": "cd .. && husky install frontend/.husky",
+    "publishToHeroku": "cd ../ && git subtree push --prefix frontend heroku-frontend master || true"
   },
   "eslintConfig": {
     "extends": [

@@ -67,6 +67,7 @@
     "coverage": "npm test --coverage",
     "production": "cd build && cross-env NODE_ENV=production node ./src/index.js",
     "build": "tsc --build",
-    "clean": "tsc --build --clean"
+    "clean": "tsc --build --clean",
+    "publishToHeroku": "cd ../ && git subtree push --prefix backend heroku-backend master || true"
   }
 }
