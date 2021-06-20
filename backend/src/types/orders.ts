@@ -1,4 +1,4 @@
-import { Item } from "src/entities/item";
+import { Item } from "src/entities/Item";
 import { DiscardableData } from "./entities";
 
 export interface OrderPatchData {
