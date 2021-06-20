@@ -64,7 +64,7 @@ const Signup: React.FC = () => {
                     type="text"
                     autoComplete="name"
                     required
-                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-orange focus:border-orange focus:z-10 sm:text-sm"
+                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
                     placeholder="Name"
                     value={name}
                     onChange={(e) => {
@@ -84,7 +84,7 @@ const Signup: React.FC = () => {
                     type="text"
                     autoComplete="username"
                     required
-                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-orange focus:border-orange focus:z-10 sm:text-sm"
+                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
                     placeholder="Username"
                     value={username}
                     onChange={(e) => {
@@ -104,7 +104,7 @@ const Signup: React.FC = () => {
                     type="text"
                     autoComplete="email-address"
                     required
-                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-orange focus:border-orange focus:z-10 sm:text-sm"
+                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
                     placeholder="E-mail address"
                     value={email}
                     onChange={(e) => {
@@ -124,7 +124,7 @@ const Signup: React.FC = () => {
                     type="password"
                     autoComplete="current-password"
                     required
-                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-orange focus:border-orange focus:z-10 sm:text-sm"
+                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => {
@@ -143,7 +143,7 @@ const Signup: React.FC = () => {
                     name="password"
                     type="password"
                     required
-                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-orange focus:border-orange focus:z-10 sm:text-sm"
+                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
                     placeholder="Confirm Password"
                     value={confirmPassword}
                     onChange={(e) => {
@@ -157,11 +157,11 @@ const Signup: React.FC = () => {
               <div>
                 <button
                   type="submit"
-                  className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-md text-white bg-orange hover:bg-orange focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange"
+                  className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                 >
                   <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                     <svg
-                      className="h-5 w-5 text-orange group-hover:text-orange"
+                      className="h-5 w-5 text-orange-600 group-hover:text-orange-500"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                       fill="currentColor"
@@ -187,7 +187,7 @@ const Signup: React.FC = () => {
             <div className="text-sm">
               <a
                 href="/login"
-                className="font-medium text-orange hover:text-orange"
+                className="font-medium text-orange-600 hover:text-orange-500"
               >
                 Sign in
               </a>
