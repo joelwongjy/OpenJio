@@ -16,7 +16,7 @@ export interface JioPostData {
   name: string;
   closeAt: Date;
   paymentNumber: string;
-  userId: number;
+  user: User;
   orderLimit?: number;
 }
 export interface JioListData extends DiscardableData {
