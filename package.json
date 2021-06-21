@@ -4,7 +4,6 @@
   "description": "Backend for OpenJio",
   "private": true,
   "main": "index.ts",
-  "type": "module",
   "repository": "https://github.com/openjio/backend",
   "author": "JoJo's Circus",
   "dependencies": {
@@ -67,6 +66,6 @@
     "test:ci": "cross-env NODE_ENV=test jest --verbose --forceExit --runInBand --json --outputFile=/home/runner/work/_actions/mattallty/jest-github-action/v1/dist/jest.results.json",
     "coverage": "npm test --coverage",
     "clean": "tsc --build --clean",
-    "heroku-postbuild": "tsc --build && cd frontend && npm install && npm run build"
+    "heroku-postbuild": "tsc --build && cd frontend && NPM_CONFIG_PRODUCTION=false npm install && npm run build"
   }
 }
