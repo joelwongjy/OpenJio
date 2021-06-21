@@ -4,6 +4,7 @@
   "description": "Backend for OpenJio",
   "private": true,
   "main": "index.ts",
+  "type": "module",
   "repository": "https://github.com/openjio/backend",
   "author": "JoJo's Circus",
   "dependencies": {
