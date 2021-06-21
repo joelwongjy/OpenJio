@@ -1,6 +1,7 @@
 # OpenJio
 
 ![CI Badge](https://github.com/joelwongjy/OpenJio/workflows/ESLint%20CI/badge.svg)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/129a14ea-c391-4889-bc81-4586418e3844/deploy-status)](https://app.netlify.com/sites/openjio/deploys)
 
 ### NUS Orbital (CP2106 Independent Software Development Project)<br>
 Team JoJo's Circus #2582<br>
