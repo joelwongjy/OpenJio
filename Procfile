@@ -1,1 +1,1 @@
-web: NODE_ENV=production ts-node --transpile-only ./index.ts
+web: cd build && NODE_ENV=production node ./index.js
