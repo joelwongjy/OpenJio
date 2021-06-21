@@ -1,1 +1,1 @@
-web: NODE_ENV=production node build/index.ts
+web: NODE_ENV=production node ./index.ts
