@@ -19,6 +19,7 @@
     "lodash": "^4.17.20",
     "morgan": "^1.10.0",
     "pg": "^8.6.0",
+    "pg-connection-string": "^2.5.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.25"
   },

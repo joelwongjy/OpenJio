@@ -1,4 +1,5 @@
 import { ConnectionOptions } from "typeorm";
+import * as PostgresConnectionStringParser from "pg-connection-string";
 
 switch (process.env.NODE_ENV) {
   case "development":

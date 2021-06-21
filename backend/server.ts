@@ -19,9 +19,7 @@ export class ApiServer {
 
   public server: Server | null = null;
 
-  async initialize(
-    port: string | number = process.env.PORT || 3001
-  ): Promise<void> {
+  async initialize(port = process.env.PORT || 3001): Promise<void> {
     this.connection = await createConnection(postgres);
 
     const app = express();
