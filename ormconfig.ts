@@ -30,7 +30,7 @@ if (
   throw new Error("Missing database config!");
 }
 
-export const postgres: ConnectionOptions = {
+const postgres: ConnectionOptions = {
   type: "postgres",
   username: POSTGRES_USERNAME,
   password: POSTGRES_PASSWORD,
@@ -55,4 +55,8 @@ export const postgres: ConnectionOptions = {
   dropSchema: false,
 };
 
-module.exports = postgres;
+if (process.env.DATABASE_URL) {
+  Object.assign(postgres, { url: process.env.DATABASE_URL });
+}
+
+export default postgres;

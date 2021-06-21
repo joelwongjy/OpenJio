@@ -7,7 +7,7 @@ import morgan from "morgan";
 import path from "path";
 import "reflect-metadata";
 import { Connection, createConnection } from "typeorm";
-import { postgres } from "./ormconfig";
+import postgres from "./ormconfig";
 import routes from "./src/routes";
 
 const corsOptions: CorsOptions = {

@@ -43,10 +43,10 @@
     "pretty-quick": "^3.0.0",
     "supertest": "^4.0.2",
     "ts-jest": "^26.3.0",
-    "ts-node": "^9.1.1",
+    "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.62",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.3.4"
+    "typescript": "^4.0.2"
   },
   "lint-staged": {
     "**/*.{ts,js}": [
@@ -60,7 +60,7 @@
   },
   "scripts": {
     "lint": "prettier --write \"src/**/*.{ts,tsx}\" --tab-width 2",
-    "start": "ts-node ./index.ts",
+    "start": "set debug=* && NODE_ENV=development ts-node-dev --respawn --transpile-only ./index.ts",
     "typeorm": "ts-node -r tsconfig-paths/register ../node_modules/typeorm/cli.js",
     "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit",
     "test:ci": "cross-env NODE_ENV=test jest --verbose --forceExit --runInBand --json --outputFile=/home/runner/work/_actions/mattallty/jest-github-action/v1/dist/jest.results.json",
@@ -68,7 +68,7 @@
     "production": "cd build && cross-env NODE_ENV=production node ./src/index.js",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
+    "heroku-postbuild": "cd frontend && npm install && npm run build",
     "publishToHeroku": "cd ../ && git subtree push --prefix backend heroku-backend master || true"
   }
 }
