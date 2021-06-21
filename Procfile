@@ -1,1 +1,1 @@
-web: cd build && NODE_ENV=production node ./index.js
+web: cd build && NODE_ENV=production node ./server.js
