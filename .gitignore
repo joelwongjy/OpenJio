@@ -12,10 +12,6 @@ node_modules
 frontend/coverage
 coverage
 
-# production
-frontend/build
-build
-
 # misc
 frontend/.DS_Store
 frontend/.env
