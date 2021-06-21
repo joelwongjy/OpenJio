@@ -9,6 +9,7 @@ node_modules
 coverage
 
 # misc
+build
 .DS_Store
 .env
 .env.local
