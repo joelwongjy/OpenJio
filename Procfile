@@ -1,1 +1,1 @@
-web: NODE_ENV=production node --loader ts-node/esm ./index.ts
+web: NODE_ENV=production ts-node --transpile-only ./index.ts
