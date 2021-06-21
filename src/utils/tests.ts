@@ -1,7 +1,7 @@
 import faker from "faker";
 import { getRepository } from "typeorm";
 import { User } from "../entities/User";
-import ApiServer from "../server";
+import ApiServer from "../../server";
 
 faker.seed(127);
 
@@ -37,7 +37,13 @@ export class Fixtures {
 
 export async function loadFixtures(_apiServer: ApiServer): Promise<Fixtures> {
   const users: User[] = [];
-  const user = new User("admin", "Admin", "test@gmail.com", "setMeUp?", "setMeUp?");
+  const user = new User(
+    "admin",
+    "Admin",
+    "test@gmail.com",
+    "setMeUp?",
+    "setMeUp?"
+  );
   users.push(user);
 
   await getRepository(User).save(users);
