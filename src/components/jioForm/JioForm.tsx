@@ -2,8 +2,9 @@ import React, { useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import { TimePicker } from '@material-ui/pickers';
 
-import { CREATE, JIO } from 'constants/routes';
+import { CREATE, JIOS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
+import { useUser } from 'contexts/UserContext';
 import { JioFormMode } from 'interfaces/components/jioForm';
 import { JioData, JioPatchData, JioPostData } from 'interfaces/models/jios';
 import ApiService from 'services/apiService';
@@ -32,6 +33,7 @@ const JioForm: React.FC<JioFormProps> = ({
   alertCallback,
   cancelCallback,
 }) => {
+  const { user } = useUser();
   const history = useHistory();
   const { hasError, setHasError } = useError();
 
@@ -44,6 +46,7 @@ const JioForm: React.FC<JioFormProps> = ({
       name: jio?.name ?? '',
       closeAt: jio?.closeAt ?? new Date(),
       orderLimit: jio?.orderLimit ?? 0,
+      userId: user?.id,
       paymentNumber: jio?.paymentNumber ?? '',
     }
   );
@@ -74,13 +77,12 @@ const JioForm: React.FC<JioFormProps> = ({
     setHasError(false);
 
     try {
-      const user = await AuthService.getUser();
-      const response = await ApiService.post(`${JIO}${CREATE}`, {
+      const response = await ApiService.post(`${JIOS}${CREATE}`, {
         ...state,
-        user,
       });
       if (response.status === 200) {
         history.push('/');
+        await AuthService.getUser();
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -97,7 +99,7 @@ const JioForm: React.FC<JioFormProps> = ({
     setHasError(false);
 
     try {
-      const response = await ApiService.patch(`${JIO}/${jio!.id}`, state);
+      const response = await ApiService.patch(`${JIOS}/${jio!.id}`, state);
       if (response.status === 200) {
         window.scrollTo({
           top: 0,
