@@ -10,7 +10,7 @@ const StatisticCard: React.FunctionComponent<StatisticCardProps> = ({
   statistic,
 }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 md:px-8 px-4 py-4 rounded-xl shadow-md">
+    <div className="bg-white dark:bg-gray-800 md:px-8 px-4 py-4 rounded-xl shadow-sm">
       <div className="flex flex-col">
         <p className="text-gray-600 dark:text-gray-300 text-md">{title}</p>
         <p className="text-black dark:text-gray-100 text-3xl font-semibold">
