@@ -1,5 +1,5 @@
-export interface ItemListData {
-    name: string;
-    quantity: number;
-    cost?: number;
+export interface ItemData {
+  name: string;
+  quantity: number;
+  cost?: number;
 }

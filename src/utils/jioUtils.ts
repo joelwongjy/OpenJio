@@ -1,19 +1,18 @@
 import { JioFormMode } from 'interfaces/components/jioForm';
-import { JioData, JioPatchData, JioPostData } from 'interfaces/models/jios';
+import { JioListData, JioPatchData, JioPostData } from 'interfaces/models/jios';
 
 export const jioFormVerification = (
   mode: JioFormMode,
   state: JioPostData | JioPatchData,
-  jio?: JioData
+  jio?: JioListData
 ): boolean => {
-  const { name, closeAt, orderLimit, paymentNumber } = state;
+  const { name, closeAt, orderLimit } = state;
   if (mode === JioFormMode.EDIT) {
     return (
       name !== jio!.name ||
       closeAt !== jio!.closeAt ||
-      orderLimit !== jio!.orderLimit ||
-      paymentNumber !== jio!.paymentNumber
+      orderLimit !== jio!.orderLimit
     );
   }
-  return name !== '' || orderLimit !== 0 || paymentNumber !== '';
+  return name !== '' || orderLimit !== 0;
 };

@@ -1,5 +1,5 @@
-import { DiscardableData } from "./base";
-import { ItemListData } from "./items";
+import { DiscardableData } from './base';
+import { ItemData } from './items';
 
 export interface OrderPatchData {
   paid?: boolean;
@@ -11,12 +11,8 @@ export interface OrderPatchData {
   }[];
 }
 
-export interface OrderListData extends DiscardableData {
+export interface OrderData extends DiscardableData {
   paid: boolean;
-  itemCount: number;
+  items: ItemData[];
   cost: number;
-}
-
-export interface OrderData extends OrderListData {
-  items: ItemListData[];
 }
