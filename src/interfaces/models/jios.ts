@@ -1,14 +1,14 @@
 import { DiscardableData } from './base';
-import { OrderListData } from './orders';
+import { ItemData } from './items';
+import { OrderData } from './orders';
 
 export interface JioPatchData {
   name?: string;
   closeAt?: Date;
-  paymentNumber?: string;
   orderLimit?: number;
   orders?: {
     id: number;
-    userId: number;
+    items: ItemData[];
     paid?: boolean;
   }[];
 }
@@ -23,6 +23,7 @@ export interface JioPostData {
 
 export interface JioListData extends DiscardableData {
   name: string;
+  joinCode: string;
   createdAt: Date;
   closeAt: Date;
   username: string;
@@ -36,6 +37,5 @@ export interface JioUserData {
 }
 
 export interface JioData extends JioListData {
-  orders: OrderListData[];
-  paymentNumber: string;
+  orders: OrderData[];
 }

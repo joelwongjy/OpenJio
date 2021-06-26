@@ -12,7 +12,7 @@ import {
 } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 
-import { CREATE, HOME } from 'constants/routes';
+import { CREATE, HOME, JIOS, JOIN } from 'constants/routes';
 import { useAuth } from 'contexts/AuthContext';
 
 const Header: React.FC = () => {
@@ -22,13 +22,13 @@ const Header: React.FC = () => {
     {
       name: 'Create OpenJio',
       description: 'Create a new OpenJio',
-      href: `${CREATE}`,
+      href: `${JIOS}${CREATE}`,
       icon: UserAddIcon,
     },
     {
       name: 'Join OpenJio',
       description: 'Join an existing OpenJio',
-      href: '#',
+      href: `${JIOS}${JOIN}`,
       icon: CursorClickIcon,
     },
     {

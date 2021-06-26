@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 
-import Header from 'components/header';
 import OpenedJioList from 'components/openedJioList';
+import PageContainer from 'components/pageContent';
 import StatisticList from 'components/statisticList';
 import { JIOS, USER } from 'constants/routes';
 import { useUser } from 'contexts/UserContext';
@@ -81,19 +81,16 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100 bg-cover min-h-screen">
-      <Header />
-      <div className="lg:px-16 md:px-8 px-4 space-y-6 py-6">
-        <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-          Welcome, {user!.name}!
-        </h2>
-        <StatisticList />
-        <h3 className="text-xl font-bold pt-4 leading-7 text-gray-900 sm:text-2xl sm:truncate">
-          Opened Jios
-        </h3>
-        <OpenedJioList openedJios={state.openedJios} />
-      </div>
-    </div>
+    <PageContainer>
+      <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+        Welcome, {user!.name}!
+      </h2>
+      <StatisticList />
+      <h3 className="text-xl font-bold pt-4 leading-7 text-gray-900 sm:text-2xl sm:truncate">
+        Opened Jios
+      </h3>
+      <OpenedJioList openedJios={state.openedJios} />
+    </PageContainer>
   );
 };
 

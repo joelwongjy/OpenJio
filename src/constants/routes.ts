@@ -10,3 +10,4 @@ export const JIOS = '/jios';
 export const USER = '/user';
 
 export const CREATE = '/create';
+export const JOIN = '/join';

@@ -14,6 +14,7 @@ import { jioFormVerification } from 'utils/jioUtils';
 interface JioFormProps {
   mode: JioFormMode;
   jio?: JioData;
+  savedCallback?: () => void;
   cancelCallback: () => void;
   alertCallback: (
     isAlertOpen: boolean,
@@ -30,6 +31,7 @@ export type JioFormState = JioPostData | JioPatchData;
 const JioForm: React.FC<JioFormProps> = ({
   mode,
   jio,
+  savedCallback,
   alertCallback,
   cancelCallback,
 }) => {
@@ -47,7 +49,6 @@ const JioForm: React.FC<JioFormProps> = ({
       closeAt: jio?.closeAt ?? new Date(),
       orderLimit: jio?.orderLimit ?? 0,
       userId: user?.id,
-      paymentNumber: jio?.paymentNumber ?? '',
     }
   );
 
@@ -101,10 +102,7 @@ const JioForm: React.FC<JioFormProps> = ({
     try {
       const response = await ApiService.patch(`${JIOS}/${jio!.id}`, state);
       if (response.status === 200) {
-        window.scrollTo({
-          top: 0,
-          behavior: 'auto',
-        });
+        savedCallback!();
         await AuthService.getUser();
       }
     } catch (e) {
@@ -118,23 +116,41 @@ const JioForm: React.FC<JioFormProps> = ({
     switch (mode) {
       case JioFormMode.NEW:
         return (
-          <button
-            type="submit"
-            onClick={handleAdd}
-            className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-          >
-            OpenJio
-          </button>
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              onClick={handleAdd}
+              className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+            >
+              OpenJio
+            </button>
+          </div>
         );
       case JioFormMode.EDIT:
         return (
-          <button
-            type="submit"
-            onClick={handleEdit}
-            className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-          >
-            Save Changes
-          </button>
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              onClick={handleEdit}
+              className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+            >
+              Save Changes
+            </button>
+          </div>
         );
       default:
         return <></>;
@@ -142,11 +158,17 @@ const JioForm: React.FC<JioFormProps> = ({
   };
 
   return (
-    <div className="min-h-screen flex justify-center bg-gray-50 bg-cover py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex justify-center bg-gray-100 bg-cover py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-sm w-full space-y-8">
         <div>
           <h2 className="text-center text-3xl font-extrabold text-gray-900">
-            Create <span className="text-orange-600">Open</span>Jio
+            {mode === JioFormMode.NEW ? (
+              <span>Create </span>
+            ) : (
+              <span>Edit </span>
+            )}
+            <span className="text-orange-600">Open</span>
+            Jio
           </h2>
         </div>
         <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
@@ -201,32 +223,7 @@ const JioForm: React.FC<JioFormProps> = ({
               }
             />
           </div>
-          <div>
-            <label
-              className="text-gray-700 dark:text-gray-200 font-semibold"
-              htmlFor="paymentNumber"
-            >
-              Payment Number
-            </label>
-            <input
-              id="paymentNumber"
-              type="text"
-              required
-              className="block w-full px-4 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
-              value={state.paymentNumber}
-              onChange={(e) => setState({ paymentNumber: e!.target.value })}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-md bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-            >
-              Cancel
-            </button>
-            {renderButtons()}
-          </div>
+          {renderButtons()}
         </form>
         {hasError ? (
           <div
