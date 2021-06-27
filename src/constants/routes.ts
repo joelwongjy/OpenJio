@@ -7,6 +7,7 @@ export const UNAUTHED_ROUTES = [LOGIN];
 
 export const HOME = '/home';
 export const JIOS = '/jios';
+export const ORDERS = '/orders';
 export const USER = '/user';
 
 export const CREATE = '/create';
