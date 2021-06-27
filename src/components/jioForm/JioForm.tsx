@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import { TimePicker } from '@material-ui/pickers';
+import { addDays, isBefore } from 'date-fns';
 
 import { CREATE, JIOS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
@@ -14,7 +15,7 @@ import { jioFormVerification } from 'utils/jioUtils';
 interface JioFormProps {
   mode: JioFormMode;
   jio?: JioData;
-  savedCallback?: () => void;
+  savedCallback?: (jio: Omit<JioPostData, 'userId'>) => void;
   cancelCallback: () => void;
   alertCallback: (
     isAlertOpen: boolean,
@@ -48,7 +49,7 @@ const JioForm: React.FC<JioFormProps> = ({
       name: jio?.name ?? '',
       closeAt: jio?.closeAt ?? new Date(),
       orderLimit: jio?.orderLimit ?? 0,
-      userId: user?.id,
+      userId: user!.id,
     }
   );
 
@@ -102,7 +103,11 @@ const JioForm: React.FC<JioFormProps> = ({
     try {
       const response = await ApiService.patch(`${JIOS}/${jio!.id}`, state);
       if (response.status === 200) {
-        savedCallback!();
+        savedCallback!({
+          name: state.name!,
+          closeAt: state.closeAt!,
+          orderLimit: state.orderLimit,
+        });
         await AuthService.getUser();
       }
     } catch (e) {
@@ -202,7 +207,13 @@ const JioForm: React.FC<JioFormProps> = ({
               // eslint-disable-next-line react/jsx-boolean-value
               ampm={true}
               value={state.closeAt}
-              onChange={(time) => setState({ closeAt: time! })}
+              onChange={(time) => {
+                let closeAt = time as Date;
+                if (isBefore(closeAt, new Date())) {
+                  closeAt = addDays(closeAt, 1);
+                }
+                setState({ closeAt });
+              }}
             />
           </div>
           <div>
