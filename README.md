@@ -3,24 +3,42 @@
 ![CI Badge](https://github.com/joelwongjy/OpenJio/workflows/ESLint%20CI/badge.svg)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/129a14ea-c391-4889-bc81-4586418e3844/deploy-status)](https://app.netlify.com/sites/openjio/deploys)
 
+
+### Site is deployed [here](https://openjio.netlify.app)!
+
 ### NUS Orbital (CP2106 Independent Software Development Project)<br>
+<b>Orbital Targeted Level of Achievement:</b> Apollo 11
+
 Team JoJo's Circus #2582<br>
 Joel Wong & Joseph Marcus<br>
+
 ## Table of contents
 
-- [Status](#status)
-- [General Info](#general-info)
+- [Features](#features)
+- [Motivations and Aims](#motivations-and-aims)
 - [Tech Stack](#tech-stack)
 - [Setup](#setup)
 - [Development](#development)
-- [Features](#features)
 
-## Status
+## Features
 
-Project is under development
-## General Info
+<b>List of core features</b>
 
-<b>Orbital Targeted Level of Achievement:</b> Apollo 11
+- Create an OpenJio invite :white_check_mark:
+- Generate 6-digit shareable code :white_check_mark:
+- Share a link to join the food order to various Telegram groups
+- View joined, created and closed (but pending payment) OpenJios :construction:
+- Add order and items to an OpenJio :white_check_mark:
+- View current orders in OpenJio :white_check_mark:
+- Add cost of items after OpenJio is closed
+- Split delivery cost and discounts among each order
+- Mark order as paid
+- Access to PayLah! link for payment
+- View past orders and outstanding fees owed
+- View monthly statistics of orders and spendings :construction:
+
+
+## Motivations and Aims
 
 <b>Problem Identification & Motivation: </b>
 You’re staying in Hall and craving some supper. You text the Level Telegram group to ask if anyone wants to combine orders. People start asking for the menu so you direct them to an external site. A whole bunch of orders comes in that flood the chat. After the food arrives, you hunt down each person for their payment and the chat is flooded with payment messages. Some people take ages to reply and the message gets drowned. Others do not know what number to pay to and delay payment until someone.
@@ -107,15 +125,3 @@ ionic serve
 The app should now be running locally on `localhost:3000`.
 
 The website should be now be live and connected with the backend server and database.
-
-## Features
-
-<b>List of core features</b>
-
-- Start a food order invite
-- Share a link to join the food order to various Telegram groups
-- Easy selection of food items through accessing the menu from GrabFood
-- View open food orders and the current delivery cost for each order
-- Split the cost of food and delivery among each person
-- Access to PayLah! link for payment
-- View past orders and outstanding fees owed
