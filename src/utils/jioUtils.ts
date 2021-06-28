@@ -1,5 +1,6 @@
 import { JioFormMode } from 'interfaces/components/jioForm';
 import { JioListData, JioPatchData, JioPostData } from 'interfaces/models/jios';
+import { OrderData } from 'interfaces/models/orders';
 
 export const jioFormVerification = (
   mode: JioFormMode,
@@ -15,4 +16,11 @@ export const jioFormVerification = (
     );
   }
   return name !== '' || orderLimit !== 0;
+};
+
+export const userHasCreatedOrder = (
+  userId: number,
+  orders: OrderData[]
+): boolean => {
+  return orders.map((order) => order.userId).includes(userId);
 };

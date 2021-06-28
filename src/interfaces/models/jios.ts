@@ -1,22 +1,26 @@
 import { DiscardableData } from './base';
-import { ItemData } from './items';
 import { OrderData } from './orders';
 
 export interface JioPatchData {
   name?: string;
   closeAt?: Date;
   orderLimit?: number;
-  orders?: {
-    id: number;
-    items: ItemData[];
+  orders: {
+    id?: number;
+    userId?: number;
     paid?: boolean;
+    items?: {
+      id?: number;
+      name?: string;
+      quantity?: number;
+      cost?: number;
+    }[];
   }[];
 }
 
 export interface JioPostData {
   name: string;
   closeAt: Date;
-  paymentNumber: string;
   userId: number;
   orderLimit?: number;
 }

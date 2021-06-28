@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 
 import OpenedJioList from 'components/openedJioList';
-import PageContainer from 'components/pageContent';
+import PageContainer from 'components/pageContainer';
 import StatisticList from 'components/statisticList';
 import { JIOS, USER } from 'constants/routes';
 import { useUser } from 'contexts/UserContext';
