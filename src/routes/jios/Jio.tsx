@@ -8,16 +8,24 @@ import { format, formatDistanceToNow } from 'date-fns';
 import Alert from 'components/alert';
 import JioForm from 'components/jioForm';
 import Loading from 'components/loading';
-import PageContainer from 'components/pageContent';
+import OrderForm from 'components/orderForm';
+import PageContainer from 'components/pageContainer';
 import TabBar from 'components/tabBar';
 import { JIOS } from 'constants/routes';
+import { useUser } from 'contexts/UserContext';
 import { JioFormMode } from 'interfaces/components/jioForm';
-import { JioData, JioListData, JioPatchData } from 'interfaces/models/jios';
-import { OrderData } from 'interfaces/models/orders';
+import {
+  JioData,
+  JioListData,
+  JioPatchData,
+  JioPostData,
+} from 'interfaces/models/jios';
+import { OrderData, OrderMode } from 'interfaces/models/orders';
 import { RouteParams, RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 import AuthService from 'services/authService';
 import { getAlertCallback } from 'utils/alertUtils';
+import { userHasCreatedOrder } from 'utils/jioUtils';
 
 interface JioState extends RouteState {
   jio: JioData | null;
@@ -30,6 +38,7 @@ interface JioState extends RouteState {
 }
 
 const Jio: React.FC = () => {
+  const { user } = useUser();
   const { id } = useParams<RouteParams>();
   const history = useHistory();
 
@@ -133,6 +142,7 @@ const Jio: React.FC = () => {
             .filter((o) => o.id !== order.id)
             .map((c) => ({
               id: c.id,
+              userId: c.userId,
               items: c.items,
               paid: c.paid,
             })),
@@ -156,14 +166,26 @@ const Jio: React.FC = () => {
     return <Loading />;
   }
 
+  const mode = userHasCreatedOrder(user!.id, state.jio!.orders)
+    ? OrderMode.EDIT
+    : OrderMode.NEW;
+
   return (
     <PageContainer>
       {state.isEditing ? (
         <JioForm
           mode={JioFormMode.EDIT}
           jio={state.jio!}
-          savedCallback={() => {
-            setState({ isEditing: false });
+          savedCallback={(jio: Omit<JioPostData, 'userId'>) => {
+            setState({
+              isEditing: false,
+              jio: {
+                ...state.jio!,
+                name: jio.name,
+                closeAt: jio.closeAt,
+                orderLimit: jio.orderLimit,
+              },
+            });
           }}
           alertCallback={alertCallback}
           cancelCallback={() => setState({ isEditing: false })}
@@ -331,7 +353,14 @@ const Jio: React.FC = () => {
           </div>
         </div>
       )}
-      <TabBar orders={state.jio!.orders} />
+      <TabBar mode={mode} orders={state.jio!.orders}>
+        <OrderForm
+          mode={mode}
+          alertCallback={alertCallback}
+          jio={state.jio}
+          jioCallback={(jio: JioData) => setState({ jio })}
+        />
+      </TabBar>
 
       <Alert
         isAlertOpen={state.isAlertOpen!}
