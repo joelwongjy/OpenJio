@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
 import { TimePicker } from '@material-ui/pickers';
-import { addDays, isBefore } from 'date-fns';
+import { addDays, getDate, isBefore, set } from 'date-fns';
 
 import { CREATE, JIOS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
@@ -9,7 +9,6 @@ import { useUser } from 'contexts/UserContext';
 import { JioFormMode } from 'interfaces/components/jioForm';
 import { JioData, JioPatchData, JioPostData } from 'interfaces/models/jios';
 import ApiService from 'services/apiService';
-import AuthService from 'services/authService';
 import { jioFormVerification } from 'utils/jioUtils';
 
 interface JioFormProps {
@@ -84,7 +83,6 @@ const JioForm: React.FC<JioFormProps> = ({
       });
       if (response.status === 200) {
         history.push('/');
-        await AuthService.getUser();
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -108,7 +106,6 @@ const JioForm: React.FC<JioFormProps> = ({
           closeAt: state.closeAt!,
           orderLimit: state.orderLimit,
         });
-        await AuthService.getUser();
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -208,7 +205,7 @@ const JioForm: React.FC<JioFormProps> = ({
               ampm={true}
               value={state.closeAt}
               onChange={(time) => {
-                let closeAt = time as Date;
+                let closeAt = set(time as Date, { date: getDate(new Date()) });
                 if (isBefore(closeAt, new Date())) {
                   closeAt = addDays(closeAt, 1);
                 }

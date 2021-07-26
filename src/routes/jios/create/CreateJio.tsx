@@ -1,8 +1,8 @@
 import React, { useReducer } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
 import Alert from 'components/alert';
-import Header from 'components/header/Header';
+import Header from 'components/header';
 import JioForm from 'components/jioForm';
 import { HOME } from 'constants/routes';
 import { JioFormMode } from 'interfaces/components/jioForm';

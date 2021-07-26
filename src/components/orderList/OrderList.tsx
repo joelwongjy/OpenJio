@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { OrderData } from 'interfaces/models/orders';
+import { totalCost } from 'utils/jioUtils';
 
 interface OrderListProps {
   order: OrderData;
@@ -25,16 +26,28 @@ const OrderList: React.FunctionComponent<OrderListProps> = ({ order }) => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {order.items.map((item) => (
-                  // eslint-disable-next-line react/no-array-index-key
                   <tr key={item.id}>
                     <td className="px-6 py-4 whitespace-pre-wrap ">
-                      <div className="text-sm font-medium text-gray-900">
-                        {item.quantity}x {item.name}
+                      <div className="text-sm text-gray-500 flex justify-between">
+                        <div className="text-sm font-medium text-gray-900">
+                          {item.quantity}x {item.name}
+                        </div>
+                        <div>${Number(item.cost).toFixed(2)}</div>
                       </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
+              <tfoot className="bg-gray-100">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium uppercase"
+                  >
+                    Total: ${totalCost(order).toFixed(2)}
+                  </th>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </div>

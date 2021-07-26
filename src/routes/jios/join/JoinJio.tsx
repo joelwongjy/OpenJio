@@ -1,8 +1,8 @@
 import React, { useReducer } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
 import Alert from 'components/alert';
-import Header from 'components/header/Header';
+import Header from 'components/header';
 import JoinJioForm from 'components/joinJioForm';
 import { RouteState } from 'interfaces/routes/common';
 import { getAlertCallback } from 'utils/alertUtils';

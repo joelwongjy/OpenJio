@@ -2,7 +2,7 @@ import React from 'react';
 import { format, formatDistanceToNow } from 'date-fns';
 
 import ProgressBar from 'components/progressBar';
-import { JIOS } from 'constants/routes';
+import { JIO, JIOS } from 'constants/routes';
 import { JioListData } from 'interfaces/models/jios';
 
 interface JioCardProps {
@@ -11,7 +11,7 @@ interface JioCardProps {
 
 const JioCard: React.FunctionComponent<JioCardProps> = ({ jio }) => {
   return (
-    <a href={`${JIOS}/${jio.joinCode}`}>
+    <a href={`${JIOS}${JIO}/${jio.joinCode}`}>
       <div className="bg-white dark:bg-gray-800 md:px-8 px-4 py-6 rounded-xl shadow-sm hover:shadow-xl transition-shadow cursor-pointer">
         <div className="flex flex-col">
           <div className="flex items-center justify-between">
