@@ -4,10 +4,16 @@ import { useAsync } from 'react-async';
 
 import Loading from 'components/loading';
 import AuthContextInterface from 'interfaces/contexts/authContext';
-import { UserLoginData, UserPostData } from 'interfaces/models/users';
+import {
+  UserLoginData,
+  UserPatchData,
+  UserPostData,
+} from 'interfaces/models/users';
 import AuthService from 'services/authService';
 
-const AuthContext = React.createContext<AuthContextInterface | undefined>(undefined);
+const AuthContext = React.createContext<AuthContextInterface | undefined>(
+  undefined
+);
 
 const AuthProvider: React.FunctionComponent = (props) => {
   const [firstAttemptFinished, setFirstAttemptFinished] = React.useState(false);
@@ -43,26 +49,40 @@ const AuthProvider: React.FunctionComponent = (props) => {
     }
   }
 
-  const signup = (signupData: UserPostData): Promise<void> => AuthService.signup(signupData)
-    .then(reload)
-    .catch((e: Error) => {
-      return Promise.reject(new Error(e.message));
-    });
+  const signup = (signupData: UserPostData): Promise<void> =>
+    AuthService.signup(signupData)
+      .then(reload)
+      .catch((e: Error) => {
+        return Promise.reject(new Error(e.message));
+      });
 
-  const login = (loginData: UserLoginData): Promise<void> => AuthService.login(loginData)
-    .then(reload)
-    .catch((e: Error) => {
-      return Promise.reject(new Error(e.message));
-    });
+  const login = (loginData: UserLoginData): Promise<void> =>
+    AuthService.login(loginData)
+      .then(reload)
+      .catch((e: Error) => {
+        return Promise.reject(new Error(e.message));
+      });
 
-  const logout = (): Promise<void> => AuthService.logout()
-    .then(reload)
-    .then(() => window.location.replace(window.location.href));
+  const update = (userData: UserPatchData): Promise<void> =>
+    AuthService.update(userData)
+      .then(reload)
+      .catch((e: Error) => {
+        return Promise.reject(new Error(e.message));
+      });
+
+  const logout = (): Promise<void> =>
+    AuthService.logout()
+      .then(reload)
+      .then(() => window.location.replace(window.location.href));
 
   return (
     <AuthContext.Provider
       value={{
-        data, signup, login, logout,
+        data,
+        signup,
+        login,
+        update,
+        logout,
       }}
       {...props}
     />

@@ -1,7 +1,11 @@
 import store from 'app/store';
 import { GENERAL_ERROR } from 'constants/messages';
 import { PersonData } from 'interfaces/models/persons';
-import { UserLoginData, UserPostData } from 'interfaces/models/users';
+import {
+  UserLoginData,
+  UserPatchData,
+  UserPostData,
+} from 'interfaces/models/users';
 import { clearUser, setUser } from 'reducers/miscDux';
 import ApiService from 'services/apiService';
 import TokenUtils from 'utils/tokenUtils';
@@ -15,7 +19,7 @@ const logout = (): Promise<void> => {
 const signup = async (data: UserPostData): Promise<null> => {
   const response = await ApiService.post('users', data).catch((error) => {
     return Promise.reject(
-      new Error(error.response?.data?.error ?? GENERAL_ERROR),
+      new Error(error.response?.data?.error ?? GENERAL_ERROR)
     );
   });
   return TokenUtils.storeToken(response);
@@ -24,10 +28,19 @@ const signup = async (data: UserPostData): Promise<null> => {
 const login = async (data: UserLoginData): Promise<null> => {
   const response = await ApiService.post('auth/login', data).catch((error) => {
     return Promise.reject(
-      new Error(error.response?.data?.error ?? GENERAL_ERROR),
+      new Error(error.response?.data?.error ?? GENERAL_ERROR)
     );
   });
   return TokenUtils.storeToken(response);
+};
+
+const update = async (data: UserPatchData): Promise<null> => {
+  await ApiService.patch('users/self', data).catch((error) => {
+    return Promise.reject(
+      new Error(error.response?.data?.error ?? GENERAL_ERROR)
+    );
+  });
+  return Promise.resolve(null);
 };
 
 const getUser = async (): Promise<PersonData | null> => {
@@ -54,6 +67,7 @@ const getUser = async (): Promise<PersonData | null> => {
 export default {
   signup,
   login,
+  update,
   logout,
   getUser,
 };

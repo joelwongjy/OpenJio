@@ -1,5 +1,11 @@
 import { JioFormMode } from 'interfaces/components/jioForm';
-import { JioListData, JioPatchData, JioPostData } from 'interfaces/models/jios';
+import { ItemListData } from 'interfaces/models/items';
+import {
+  JioData,
+  JioListData,
+  JioPatchData,
+  JioPostData,
+} from 'interfaces/models/jios';
 import { OrderData } from 'interfaces/models/orders';
 
 export const jioFormVerification = (
@@ -24,3 +30,32 @@ export const userHasCreatedOrder = (
 ): boolean => {
   return orders.map((order) => order.userId).includes(userId);
 };
+
+export const getUserOrder = (
+  userId: number,
+  orders: OrderData[]
+): OrderData | undefined => {
+  const userOrder = orders.find((order) => order.userId === userId);
+  return userOrder;
+};
+
+export const getItems = (jio: JioData): ItemListData[] => {
+  const items = jio.orders.flatMap((order) => order.items);
+  return items;
+};
+
+export const costsEntered = (jio: JioData): boolean => {
+  const items = jio.orders.flatMap((order) => order.items);
+  return (
+    items.filter((item) => !!item.cost).length === items.length &&
+    items.length > 0
+  );
+};
+
+export const totalCost = (order: OrderData): number => {
+  return order.items.reduce(
+    (a, item) => a + Number(item.quantity * (item.cost ?? 0)),
+    0
+  );
+};
+

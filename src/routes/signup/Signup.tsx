@@ -1,21 +1,39 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
+import StepsBar from 'components/stepsBar/StepsBar';
 import { useAuth } from 'contexts/AuthContext';
 
 const Signup: React.FC = () => {
-  const { signup } = useAuth();
+  const { signup, update } = useAuth();
+  const history = useHistory();
 
   const [name, setName] = useState<string>('');
   const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [paylah, setPaylah] = useState<string>('');
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [step, setStep] = useState<number>(1);
 
   const clearError = () => {
     setIsError(false);
     setErrorMessage('');
+  };
+
+  const handleNextStep = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    clearError();
+    try {
+      await update({ paylah });
+    } catch (error) {
+      setIsError(true);
+      setErrorMessage(error.message);
+      return;
+    }
+    setStep(3);
   };
 
   const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -32,24 +50,15 @@ const Signup: React.FC = () => {
     } catch (error) {
       setIsError(true);
       setErrorMessage(error.message);
+      return;
     }
+    setStep(2);
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center lg:bg-food-background bg-gray-50 bg-cover py-12 px-4 sm:px-6 lg:px-8">
-      <div className="absolute bg-black opacity-0 lg:opacity-30 inset-0 z-0" />
-      <div className="max-w-md w-full space-y-8 p-10 bg-gray-50 rounded-xl lg:shadow-lg z-10">
-        <div className="max-w-sm w-full space-y-8">
-          <div>
-            <img
-              className="mx-auto h-12 w-auto"
-              src="/images/hamburger.svg"
-              alt="OpenJio"
-            />
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Create Your Account
-            </h2>
-          </div>
+  const renderForm = () => {
+    switch (step) {
+      case 1:
+        return (
           <form className="mt-8 space-y-6" onSubmit={handleSignup}>
             <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-1">
               <input type="hidden" name="remember" value="true" />
@@ -159,40 +168,112 @@ const Signup: React.FC = () => {
                   type="submit"
                   className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
                 >
-                  <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                    <svg
-                      className="h-5 w-5 text-orange-600 group-hover:text-orange-500"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </span>
                   Sign Up
                 </button>
               </div>
             </div>
           </form>
-
-          <div className="flex items-center">
-            <p className="mr-1 text-sm text-gray-900">
-              Already have an account?
-            </p>
-            <div className="text-sm">
-              <a
-                href="/login"
-                className="font-medium text-orange-600 hover:text-orange-500"
-              >
-                Sign in
-              </a>
+        );
+      case 2:
+        return (
+          <form className="mt-8 space-y-6" onSubmit={handleNextStep}>
+            <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-1">
+              <input type="hidden" name="remember" value="true" />
+              <div className="rounded-md shadow-sm -space-y-px">
+                <div>
+                  <label htmlFor="name" className="sr-only">
+                    Name
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    required
+                    className="h-12 appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
+                    placeholder="Name"
+                    value={paylah}
+                    onChange={(e) => {
+                      clearError();
+                      setPaylah(e.target.value!);
+                    }}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-b-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                >
+                  Confirm
+                </button>
+              </div>
             </div>
+          </form>
+        );
+      case 3:
+        return (
+          <button
+            type="submit"
+            className="h-12 group relative w-full inline-flex items-center justify-center py-2 px-4 border border-transparent text-md font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+            onClick={() => history.push('/')}
+          >
+            Done
+          </button>
+        );
+      default:
+        return <></>;
+    }
+  };
+
+  const renderHeader = () => {
+    switch (step) {
+      case 1:
+        return 'Create Your Account';
+      case 2:
+        return 'Enter PayLah Link';
+      case 3:
+        return 'Start Using OpenJio!';
+      default:
+        return '';
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center lg:bg-food-background bg-gray-50 bg-cover py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 sm:p-10 p-2 bg-gray-50 rounded-xl lg:shadow-lg z-10">
+        <div className="max-w-sm w-full space-y-8">
+          <StepsBar step={step} />
+          <div>
+            <img
+              className="mx-auto h-12 w-auto"
+              src="/images/hamburger.svg"
+              alt="OpenJio"
+            />
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+              {renderHeader()}
+            </h2>
+            <p className="mt-8">
+              {step === 2 &&
+                'Go to your PayLah app and tap on My QR. Enter the digits after "transRef="'}
+            </p>
           </div>
+
+          {renderForm()}
+
+          {step === 1 && (
+            <div className="flex items-center">
+              <p className="mr-1 text-sm text-gray-900">
+                Already have an account?
+              </p>
+              <div className="text-sm">
+                <a
+                  href="/login"
+                  className="font-medium text-orange-600 hover:text-orange-500"
+                >
+                  Sign in
+                </a>
+              </div>
+            </div>
+          )}
 
           {isError ? (
             <div

@@ -54,21 +54,21 @@ const OrderForm: React.FunctionComponent<OrderFormProps> = ({
     return response.data as JioData;
   };
 
-  const handleEdit = async (id: number) => {
+  const handleEditOrder = async (id: number) => {
     try {
       const response = await ApiService.patch(`${ORDERS}/${id}`, {
-        paid: state.paid,
         items: state.items,
       });
       if (response.status === 200) {
         alertCallback(
           true,
           true,
-          'Wooo!',
-          'Your order is successfully added.',
+          'Success',
+          'Your order is successfully modified.',
           undefined,
           undefined
         );
+        jioCallback(await getJio());
       }
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -111,7 +111,7 @@ const OrderForm: React.FunctionComponent<OrderFormProps> = ({
               .map((o) => o.id)
               .includes(order.id)
         )!.id;
-        await handleEdit(newOrderId).then(async () => {
+        await handleEditOrder(newOrderId).then(async () => {
           jioCallback(await getJio());
         });
       }
@@ -120,6 +120,44 @@ const OrderForm: React.FunctionComponent<OrderFormProps> = ({
       console.log(e);
       // TODO: Add error handling here
     }
+  };
+
+  const handleDeleteOrder = (order: OrderData): void => {
+    alertCallback(
+      true,
+      true,
+      'Are you sure?',
+      'You will not be able to recover the deleted order.',
+      async () => {
+        if (jio == null) {
+          return;
+        }
+        const patchData: JioPatchData = {
+          name: jio.name,
+          closeAt: jio.closeAt,
+          orderLimit: jio.orderLimit,
+          jioState: jio.jioState,
+          orders: jio.orders
+            .filter((o) => o.id !== order.id)
+            .map((c) => ({
+              id: c.id,
+              userId: c.userId,
+              items: c.items,
+              paid: c.paid,
+            })),
+        };
+        const response = await ApiService.patch(`${JIOS}/${jio.id}`, patchData);
+        if (response.status === 200) {
+          const newOrders = jio.orders.slice();
+          const index = newOrders.map((order) => order.id).indexOf(order.id);
+          newOrders.splice(index, 1);
+          jioCallback({ ...jio, orders: newOrders });
+        } else {
+          // TODO: Handle error
+        }
+      },
+      undefined
+    );
   };
 
   const addItem = (): void => {
@@ -162,9 +200,26 @@ const OrderForm: React.FunctionComponent<OrderFormProps> = ({
     setState({ items: newItems });
   };
 
+  const resetItems = () => {
+    alertCallback(
+      true,
+      true,
+      'Confirm reset?',
+      'Your items will not be saved.',
+      () => {
+        if (order) {
+          setState({ items: order!.items });
+        } else {
+          setState({ items: [{ id: 0, name: '', quantity: 1 }] });
+        }
+      },
+      undefined
+    );
+  };
+
   return (
     <div className="flex flex-col">
-      <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div className="-my-2 sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="rounded-md shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
@@ -247,13 +302,22 @@ const OrderForm: React.FunctionComponent<OrderFormProps> = ({
         </div>
       </div>
       <div className="px-4 py-3 flex items-center justify-between border-gray-200 sm:px-6">
-        <button
-          type="button"
-          className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-          onClick={addItem}
-        >
-          Add Item
-        </button>
+        <div>
+          <button
+            type="button"
+            className="relative inline-flex items-center mr-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            onClick={addItem}
+          >
+            Add Item
+          </button>
+          <button
+            type="button"
+            className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+            onClick={resetItems}
+          >
+            Reset
+          </button>
+        </div>
         {mode === OrderMode.NEW ? (
           <button
             type="button"
@@ -265,12 +329,27 @@ const OrderForm: React.FunctionComponent<OrderFormProps> = ({
             Submit Order
           </button>
         ) : (
-          <button
-            type="button"
-            className="relative inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-          >
-            To be built
-          </button>
+          <div>
+            <button
+              type="button"
+              className="relative mr-2 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+              onClick={() => {
+                handleDeleteOrder(order!);
+              }}
+            >
+              Delete Order
+            </button>
+
+            <button
+              type="button"
+              className="relative inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+              onClick={() => {
+                handleEditOrder(order!.id);
+              }}
+            >
+              Save Changes
+            </button>
+          </div>
         )}
       </div>
     </div>

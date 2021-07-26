@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 
-import OpenedJioList from 'components/openedJioList';
+import JioList from 'components/jioList';
 import PageContainer from 'components/pageContainer';
 import StatisticList from 'components/statisticList';
 import { JIOS, USER } from 'constants/routes';
@@ -10,6 +10,7 @@ import { RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
 
 interface HomeState extends RouteState {
+  toPay: JioListData[];
   openedJios: JioListData[];
   joinedJios: JioListData[];
   hasConfirm: boolean;
@@ -27,6 +28,7 @@ const Home: React.FC = () => {
       ...a,
     }),
     {
+      toPay: [],
       openedJios: [],
       joinedJios: [],
       isAlertOpen: false,
@@ -54,6 +56,7 @@ const Home: React.FC = () => {
         const jios = response.data as JioUserData;
         if (!didCancel) {
           setState({
+            toPay: jios.toPay,
             openedJios: jios.opened,
             joinedJios: jios.joined,
             isLoading: false,
@@ -87,9 +90,17 @@ const Home: React.FC = () => {
       </h2>
       <StatisticList />
       <h3 className="text-xl font-bold pt-4 leading-7 text-gray-900 sm:text-2xl sm:truncate">
+        Payments Due
+      </h3>
+      <JioList jios={state.toPay} />
+      <h3 className="text-xl font-bold pt-4 leading-7 text-gray-900 sm:text-2xl sm:truncate">
+        Joined Jios
+      </h3>
+      <JioList jios={state.joinedJios} />
+      <h3 className="text-xl font-bold pt-4 leading-7 text-gray-900 sm:text-2xl sm:truncate">
         Opened Jios
       </h3>
-      <OpenedJioList openedJios={state.openedJios} />
+      <JioList jios={state.openedJios} />
     </PageContainer>
   );
 };

@@ -1,33 +1,37 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Fragment, useEffect, useReducer } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, PencilIcon, XIcon } from '@heroicons/react/solid';
-import { format, formatDistanceToNow } from 'date-fns';
+import { addMinutes, format, formatDistanceToNow } from 'date-fns';
 
 import Alert from 'components/alert';
+import AlertBanner from 'components/alertBanner';
 import JioForm from 'components/jioForm';
 import Loading from 'components/loading';
 import OrderForm from 'components/orderForm';
 import PageContainer from 'components/pageContainer';
 import TabBar from 'components/tabBar';
-import { JIOS } from 'constants/routes';
+import { ENTER_COSTS, JIOS, ORDERS, PAYLAH } from 'constants/routes';
 import { useUser } from 'contexts/UserContext';
 import { JioFormMode } from 'interfaces/components/jioForm';
 import {
   JioData,
   JioListData,
-  JioPatchData,
   JioPostData,
+  JioState,
 } from 'interfaces/models/jios';
-import { OrderData, OrderMode } from 'interfaces/models/orders';
+import { OrderMode } from 'interfaces/models/orders';
 import { RouteParams, RouteState } from 'interfaces/routes/common';
 import ApiService from 'services/apiService';
-import AuthService from 'services/authService';
 import { getAlertCallback } from 'utils/alertUtils';
-import { userHasCreatedOrder } from 'utils/jioUtils';
+import {
+  costsEntered,
+  getUserOrder,
+  userHasCreatedOrder,
+} from 'utils/jioUtils';
 
-interface JioState extends RouteState {
+interface JioComponentState extends RouteState {
   jio: JioData | null;
   hasConfirm: boolean;
   closeHandler: () => void;
@@ -43,7 +47,7 @@ const Jio: React.FC = () => {
   const history = useHistory();
 
   const [state, setState] = useReducer(
-    (s: JioState, a: Partial<JioState>) => ({
+    (s: JioComponentState, a: Partial<JioComponentState>) => ({
       ...s,
       ...a,
     }),
@@ -78,6 +82,7 @@ const Jio: React.FC = () => {
             jio: response.data as JioData,
             isLoading: false,
           });
+          return;
         }
       } catch (error) {
         if (!didCancel) {
@@ -100,7 +105,12 @@ const Jio: React.FC = () => {
     };
   }, []);
 
+  if (state.jio === null) {
+    return <Loading />;
+  }
+
   const alertCallback = getAlertCallback(setState);
+  const userOrder = user && getUserOrder(user!.id, state.jio!.orders);
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
@@ -124,36 +134,26 @@ const Jio: React.FC = () => {
     );
   };
 
-  const handleDeleteOrder = (order: OrderData): void => {
+  const handleClose = async () => {
     alertCallback(
       true,
       true,
-      'Are you sure?',
-      'You will not be able to recover the deleted order.',
+      'Are you sure you want to close this OpenJio?',
+      'No more orders will be allowed.',
       async () => {
-        if (state.jio == null) {
-          return;
-        }
-        const patchData: JioPatchData = {
-          name: state.jio.name,
-          closeAt: state.jio.closeAt,
-          orderLimit: state.jio.orderLimit,
-          orders: state.jio.orders
-            .filter((o) => o.id !== order.id)
-            .map((c) => ({
-              id: c.id,
-              userId: c.userId,
-              items: c.items,
-              paid: c.paid,
-            })),
+        const closedJio = {
+          ...state.jio!,
+          closeAt: new Date(),
+          jioState: costsEntered(state.jio!)
+            ? JioState.COST_ENTERED
+            : JioState.CLOSED,
         };
-        const response = await ApiService.patch(`${JIOS}/${id}`, patchData);
+        const response = await ApiService.patch(
+          `${JIOS}/${state.jio!.id}`,
+          closedJio
+        );
         if (response.status === 200) {
-          const newOrders = state.jio.orders.slice();
-          const index = newOrders.map((order) => order.id).indexOf(order.id);
-          newOrders.splice(index, 1);
-          setState({ jio: { ...state.jio, orders: newOrders } });
-          await AuthService.getUser();
+          setState({ jio: closedJio });
         } else {
           // TODO: Handle error
         }
@@ -162,16 +162,90 @@ const Jio: React.FC = () => {
     );
   };
 
-  if (state.jio === null) {
-    return <Loading />;
-  }
+  const handleReopen = async () => {
+    alertCallback(
+      true,
+      true,
+      'This OpenJio will be reopened for 30 mins!',
+      'You can modify the time by editing the OpenJio.',
+      async () => {
+        const reopenedJio = {
+          ...state.jio!,
+          closeAt: addMinutes(new Date(), 30),
+          jioState: JioState.OPEN,
+        };
+        const response = await ApiService.patch(
+          `${JIOS}/${state.jio!.id}`,
+          reopenedJio
+        );
+        if (response.status === 200) {
+          setState({ jio: reopenedJio });
+        } else {
+          // TODO: Handle error
+        }
+      },
+      undefined
+    );
+  };
 
-  const mode = userHasCreatedOrder(user!.id, state.jio!.orders)
-    ? OrderMode.EDIT
-    : OrderMode.NEW;
+  const handleTogglePaid = async () => {
+    alertCallback(
+      true,
+      true,
+      'Are you sure?',
+      'Your pay status will be updated.',
+      async () => {
+        const orderId = userOrder!.id;
+        const newOrder = { ...userOrder!, paid: !userOrder!.paid };
+        const response = await ApiService.patch(
+          `${ORDERS}/${orderId}`,
+          newOrder
+        );
+        if (response.status === 200) {
+          const newOrders = state.jio!.orders.slice();
+          const index = newOrders.map((order) => order.id).indexOf(orderId);
+          newOrders.splice(index, 1, newOrder);
+          setState({ jio: { ...state.jio!, orders: newOrders } });
+        } else {
+          // TODO: Handle error
+        }
+      },
+      undefined
+    );
+  };
+
+  const mode =
+    user && userHasCreatedOrder(user!.id, state.jio!.orders)
+      ? OrderMode.EDIT
+      : OrderMode.NEW;
+
+  const jioOpen = state.jio.jioState === JioState.OPEN;
+  const jioClosed = state.jio.jioState !== JioState.OPEN;
+  const jioCostEntered = costsEntered(state.jio!);
+  const isOwner = user && state.jio.userId === user!.id;
+  const userPaid = userOrder?.paid ?? false;
 
   return (
     <PageContainer>
+      {!user && (
+        <AlertBanner
+          title="You are not logged in"
+          message="Login is required to join an OpenJio."
+        />
+      )}
+      {jioClosed &&
+        !jioCostEntered &&
+        (isOwner ? (
+          <AlertBanner
+            title="Enter item prices"
+            message="Payments can only be collected after every item cost has been entered."
+          />
+        ) : (
+          <AlertBanner
+            title={`Waiting for ${state.jio.username} to enter prices`}
+            message="Payments can only be collected after every item cost has been entered."
+          />
+        ))}
       {state.isEditing ? (
         <JioForm
           mode={JioFormMode.EDIT}
@@ -197,14 +271,16 @@ const Jio: React.FC = () => {
               {state.jio!.name}
             </h2>
             <div className="mt-1 grid grid-rows-2 grid-flow-col gap-4 sm:flex sm:flex-row sm:mt-0 sm:space-x-6 justify-center sm:justify-start">
-              <div className="mt-2 flex flex-col items-center">
-                <div className="text-xs sm:text-sm text-gray-500">
-                  Closing in{' '}
+              {jioOpen && (
+                <div className="mt-2 flex flex-col items-center">
+                  <div className="text-xs sm:text-sm text-gray-500">
+                    Closing in{' '}
+                  </div>
+                  <div className="text-lg sm:text-xl font-semibold">
+                    {formatDistanceToNow(new Date(state.jio!.closeAt))}
+                  </div>
                 </div>
-                <div className="text-lg sm:text-xl font-semibold">
-                  {formatDistanceToNow(new Date(state.jio!.closeAt))}
-                </div>
-              </div>
+              )}
               <div className="mt-2 flex flex-col items-center mr-6">
                 <div className="text-xs sm:text-sm text-gray-500">
                   Opened at
@@ -215,7 +291,7 @@ const Jio: React.FC = () => {
               </div>
               <div className="mt-2 flex flex-col items-center">
                 <div className="text-xs sm:text-sm text-gray-500">
-                  Closing at
+                  {jioClosed ? 'Closed at' : 'Closing at'}
                 </div>
                 <div className="text-lg sm:text-xl font-semibold">
                   {format(new Date(state.jio!.closeAt), "hh:mm aaaaa'm'")}
@@ -239,127 +315,168 @@ const Jio: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="mt-5 flex lg:mt-0 lg:ml-4">
-            <span className="hidden sm:block">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-                onClick={() => setState({ isEditing: true })}
-              >
-                <PencilIcon
-                  className="-ml-1 mr-2 h-5 w-5 text-gray-500"
-                  aria-hidden="true"
-                />
-                Edit
-              </button>
-            </span>
-            <span className="hidden sm:block sm:ml-3">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-                onClick={() => handleDelete(state.jio!)}
-              >
-                <XIcon
-                  className="-ml-1 mr-2 h-5 w-5 text-gray-500"
-                  aria-hidden="true"
-                />
-                Delete
-              </button>
-            </span>
 
-            <span className="sm:ml-3">
-              <button
-                type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-              >
-                <XIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                Close Now
-              </button>
-            </span>
+          {!isOwner && jioCostEntered && (
+            <div>
+              {state.jio.paylah && (
+                <span className="sm:ml-3 mr-3">
+                  <a
+                    type="button"
+                    className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                    href={`${PAYLAH}${state.jio.paylah}`}
+                  >
+                    Pay via PayLah!
+                  </a>
+                </span>
+              )}
+              <span className="sm:ml-3">
+                <button
+                  type="button"
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                  onClick={handleTogglePaid}
+                >
+                  {userPaid ? 'Mark as unpaid' : 'Mark as paid'}
+                </button>
+              </span>
+            </div>
+          )}
 
-            {/* Dropdown */}
-            <Menu as="span" className="ml-3 relative sm:hidden">
-              {({ open }) => (
-                <>
-                  <Menu.Button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-                    More
-                    <ChevronDownIcon
-                      className="-mr-1 ml-2 h-5 w-5 text-gray-500"
+          {isOwner && (
+            <div className="mt-5 flex lg:mt-0 lg:ml-4">
+              {jioOpen && (
+                <span className="hidden sm:block">
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                    onClick={() => setState({ isEditing: true })}
+                  >
+                    <PencilIcon
+                      className="-ml-1 mr-2 h-5 w-5 text-gray-500"
                       aria-hidden="true"
                     />
-                  </Menu.Button>
-
-                  <Transition
-                    show={open}
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items
-                      static
-                      className="origin-top-right absolute right-0 mt-2 -mr-1 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-                    >
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            type="button"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'w-full text-left block px-4 py-2 text-sm text-gray-700'
-                            )}
-                            onClick={() => handleDelete(state.jio!)}
-                          >
-                            Add Order
-                          </button>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            type="button"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'w-full text-left block px-4 py-2 text-sm text-gray-700'
-                            )}
-                            onClick={() => setState({ isEditing: true })}
-                          >
-                            Edit
-                          </button>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            type="button"
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'w-full text-left block px-4 py-2 text-sm text-gray-700'
-                            )}
-                            onClick={() => handleDelete(state.jio!)}
-                          >
-                            Delete
-                          </button>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items>
-                  </Transition>
-                </>
+                    Edit
+                  </button>
+                </span>
               )}
-            </Menu>
-          </div>
+
+              {jioOpen && (
+                <span className="hidden sm:block sm:ml-3">
+                  <button
+                    type="button"
+                    className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                    onClick={() => handleDelete(state.jio!)}
+                  >
+                    <XIcon
+                      className="-ml-1 mr-2 h-5 w-5 text-gray-500"
+                      aria-hidden="true"
+                    />
+                    Delete
+                  </button>
+                </span>
+              )}
+
+              {!jioOpen && (
+                <span className="sm:ml-3 mr-3">
+                  <a
+                    type="button"
+                    className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                    href={`${JIOS}/${state.jio.joinCode}${ENTER_COSTS}`}
+                  >
+                    Enter Costs
+                  </a>
+                </span>
+              )}
+
+              <span className="sm:ml-3">
+                <button
+                  type="button"
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+                  onClick={jioClosed ? handleReopen : handleClose}
+                >
+                  {jioClosed ? 'Reopen' : 'Close Now'}
+                </button>
+              </span>
+
+              {/* Dropdown */}
+              {jioOpen && (
+                <Menu as="span" className="ml-3 relative sm:hidden">
+                  {({ open }) => (
+                    <>
+                      <Menu.Button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+                        More
+                        <ChevronDownIcon
+                          className="-mr-1 ml-2 h-5 w-5 text-gray-500"
+                          aria-hidden="true"
+                        />
+                      </Menu.Button>
+
+                      <Transition
+                        show={open}
+                        as={Fragment}
+                        enter="transition ease-out duration-200"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items
+                          static
+                          className="origin-top-right absolute right-0 mt-2 -mr-1 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        >
+                          <Menu.Item>
+                            {({ active }) => (
+                              <button
+                                type="button"
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'w-full text-left block px-4 py-2 text-sm text-gray-700'
+                                )}
+                                onClick={() => setState({ isEditing: true })}
+                              >
+                                Edit
+                              </button>
+                            )}
+                          </Menu.Item>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <button
+                                type="button"
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'w-full text-left block px-4 py-2 text-sm text-gray-700'
+                                )}
+                                onClick={() => handleDelete(state.jio!)}
+                              >
+                                Delete
+                              </button>
+                            )}
+                          </Menu.Item>
+                        </Menu.Items>
+                      </Transition>
+                    </>
+                  )}
+                </Menu>
+              )}
+            </div>
+          )}
         </div>
       )}
-      <TabBar mode={mode} orders={state.jio!.orders}>
-        <OrderForm
-          mode={mode}
-          alertCallback={alertCallback}
-          jio={state.jio}
-          jioCallback={(jio: JioData) => setState({ jio })}
-        />
+      <TabBar
+        mode={mode}
+        orders={state.jio!.orders}
+        jioUserId={state.jio!.userId}
+        jioState={state.jio!.jioState}
+      >
+        {user && (
+          <OrderForm
+            mode={mode}
+            alertCallback={alertCallback}
+            jio={state.jio}
+            order={state.jio.orders.find((order) => order.userId === user!.id)}
+            jioCallback={(jio: JioData) => setState({ jio })}
+          />
+        )}
       </TabBar>
 
       <Alert

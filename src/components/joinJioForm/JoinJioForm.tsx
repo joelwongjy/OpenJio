@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { JIOS } from 'constants/routes';
+import { JIO, JIOS } from 'constants/routes';
 import { useError } from 'contexts/ErrorContext';
 import ApiService from 'services/apiService';
-import AuthService from 'services/authService';
 
 interface JoinJioFormProps {
   cancelCallback: () => void;
@@ -36,8 +35,7 @@ const JoinJioForm: React.FC<JoinJioFormProps> = ({
     try {
       const response = await ApiService.get(`${JIOS}/${jioId}`);
       if (response.status === 200) {
-        history.push(`${JIOS}/${jioId}`);
-        await AuthService.getUser();
+        history.push(`${JIOS}${JIO}/${jioId}`);
       }
     } catch (error) {
       alertCallback(
